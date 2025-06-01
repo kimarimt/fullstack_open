@@ -1,4 +1,4 @@
-import Course from './Course'
+import Course from './components/Course'
 
 const App = () => {
   const courses = [
@@ -27,7 +27,7 @@ const App = () => {
           id: 4
         }
       ]
-    }, 
+    },
     {
       name: 'Node.js',
       id: 2,
