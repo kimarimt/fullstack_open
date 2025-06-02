@@ -42,6 +42,15 @@ const App = () => {
     return true
   }
 
+  const deleteContact = async contact => {
+    if (window.confirm(`Delete ${contact.name}?`)) {
+      const deletedContact = await contactsService.deleteContact(contact.id)
+      setContacts(
+        contacts.filter(contact => deletedContact.id !== contact.id)
+      )
+    }
+  }
+
   return (
     <>
       {contacts && (
@@ -58,6 +67,7 @@ const App = () => {
           <h2>Numbers</h2>
           <Contacts
             contacts={matches}
+            handleDelete={deleteContact}
           />
         </>
       )}

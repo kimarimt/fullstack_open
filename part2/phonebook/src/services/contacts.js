@@ -12,7 +12,13 @@ const getContacts = async () => {
   return res.data
 }
 
+const deleteContact = async id => {
+  const res = await axios.delete(`${baseUrl}/${id}`)
+  return res.data
+}
+
 export default {
   saveContact,
-  getContacts
+  getContacts,
+  deleteContact
 }
