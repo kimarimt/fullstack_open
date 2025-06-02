@@ -2,8 +2,9 @@ import { useState } from 'react'
 
 const App = () => {
   const [name, setName] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
   const [contacts, setContacts] = useState([
-    { id: 1, name: 'Arto Hellas' }
+    { id: 1, name: 'Arto Hellas', phoneNumber: '1-201-857-6948' }
   ])
 
   const handleSubmit = event => {
@@ -20,11 +21,13 @@ const App = () => {
 
     const newContact = {
       id: contacts.length + 1,
-      name
+      name,
+      phoneNumber
     }
 
     setContacts(contacts.concat(newContact))
     setName('')
+    setPhoneNumber('')
   }
 
   return (
@@ -43,6 +46,16 @@ const App = () => {
             />
           </div>
           <div>
+            <label htmlFor='phone'>phone: </label>
+            <input 
+              id='phone'
+              name='phone'
+              onChange={({ target }) => setPhoneNumber(target.value)}
+              type='phone' 
+              value={phoneNumber}
+            />
+          </div>
+          <div>
             <button type="submit">add</button>
           </div>
         </form>
@@ -51,7 +64,9 @@ const App = () => {
         <h2>Numbers</h2>
         {
           contacts.map(contact =>
-            <p key={contact.id}>{contact.name}</p>
+            <p key={contact.id}>
+              {contact.name} {contact.phoneNumber}
+            </p>
           )
         }
       </div>
