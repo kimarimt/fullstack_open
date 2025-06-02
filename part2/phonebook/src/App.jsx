@@ -17,11 +17,11 @@ const App = () => {
     fetchContacts()
   }, [])
 
-  const matches = contacts.filter(
-    contact => contact.name.includes(search)
-  )
+  const matches = contacts 
+    ? contacts.filter(contact => contact.name.includes(search))
+    : []
 
-  const addContact = (name, phoneNumber) => {
+  const addContact = async (name, phoneNumber) => {
     const contactExists = contacts.find(contact =>
       contact.name === name
     )
@@ -32,12 +32,13 @@ const App = () => {
     }
 
     const newContact = {
-      id: contacts.length + 1,
+      id: String(contacts.length + 1),
       name,
       phoneNumber
     }
 
-    setContacts(contacts.concat(newContact))
+    const savedContact = await contactsService.saveContact(newContact)
+    setContacts(contacts.concat(savedContact))
     return true
   }
 

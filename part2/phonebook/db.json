@@ -1,24 +1,29 @@
 {
   "contacts": [
-    { 
-      "id": "1", 
-      "name": "Arto Hellas", 
+    {
+      "id": "1",
+      "name": "Arto Hellas",
       "phoneNumber": "1-201-857-6948"
     },
-    { 
-      "id": "2", 
-      "name": "Ada Lovelace", 
+    {
+      "id": "2",
+      "name": "Ada Lovelace",
       "phoneNumber": "1-201-787-4300"
     },
-    { 
-      "id": "3", 
-      "name": "Dan Abramov", 
+    {
+      "id": "3",
+      "name": "Dan Abramov",
       "phoneNumber": "1-201-601-8571"
     },
-    { 
-      "id": "4", 
-      "name": "Mary Poppendieck", 
+    {
+      "id": "4",
+      "name": "Mary Poppendieck",
       "phoneNumber": "1-201-871-3754"
+    },
+    {
+      "id": "5",
+      "name": "James Sunderland",
+      "phoneNumber": "1-201-589-1813"
     }
   ]
 }
