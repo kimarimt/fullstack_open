@@ -3,10 +3,13 @@ import contactsService from './services/contacts'
 import Filter from './components/Filter'
 import ContactForm from './components/ContactForm'
 import Contacts from './components/Contacts'
+import Notification from './components/Notification'
 
 const App = () => {
   const [search, setSearch] = useState('')
   const [contacts, setContacts] = useState(null)
+  const [message, setMessage] = useState(null)
+  const [color, setColor] = useState('black')
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -31,14 +34,17 @@ const App = () => {
       return
     }
 
+    const id = Math.floor(Math.random() * 9999) + 1
+
     const newContact = {
-      id: String(contacts.length + 1),
+      id: String(id),
       name,
       phoneNumber
     }
 
     const savedContact = await contactsService.saveContact(newContact)
     setContacts(contacts.concat(savedContact))
+    toggleNotification(`${savedContact.name} saved to contacts`, 'green')
   }
 
   const editContact = async (contact, newNumber) => {
@@ -62,11 +68,24 @@ const App = () => {
     }
   }
 
+  const toggleNotification = (message, color) => {
+    setMessage(message)
+    setColor(color)
+
+    setTimeout(() => {
+      setMessage(null)
+      setColor('black')
+    }, 2000)
+  }
+
   return (
     <>
       {contacts && (
         <>
           <h1>Phonebook</h1>
+          {message && 
+            <Notification message={message} color={color} />
+          }
           <Filter
             search={search}
             onChange={({ target }) => setSearch(target.value)}
