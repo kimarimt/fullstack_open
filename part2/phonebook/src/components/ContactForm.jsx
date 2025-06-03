@@ -6,12 +6,9 @@ const ContactForm = ({ addContact }) => {
 
   const handleSubmit = event => {
     event.preventDefault()
-    const success = addContact(name, phoneNumber)
-
-    if (success) {
-      setName('')
-      setPhoneNumber('')
-    }
+    addContact(name, phoneNumber)
+    setName('')
+    setPhoneNumber('')
   }
 
   return (

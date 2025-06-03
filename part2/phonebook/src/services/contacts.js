@@ -12,6 +12,11 @@ const getContacts = async () => {
   return res.data
 }
 
+const editContact = async (id, newContact) => {
+  const res = await axios.put(`${baseUrl}/${id}`, newContact)
+  return res.data
+}
+
 const deleteContact = async id => {
   const res = await axios.delete(`${baseUrl}/${id}`)
   return res.data
@@ -20,5 +25,6 @@ const deleteContact = async id => {
 export default {
   saveContact,
   getContacts,
+  editContact,
   deleteContact
 }

@@ -1,9 +1,19 @@
 {
   "contacts": [
     {
-      "id": "5",
-      "name": "James Sunderland",
-      "phoneNumber": "1-201-589-1813"
+      "id": "1",
+      "name": "Arto Hellas",
+      "phoneNumber": "1-555-937-5700"
+    },
+    {
+      "id": "2",
+      "name": "Dan Abramov",
+      "phoneNumber": "1-555-910-8221"
+    },
+    {
+      "id": "3",
+      "name": "Ada Lovelace",
+      "phoneNumber": "1-555-910-8221"
     }
   ]
 }
