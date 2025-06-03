@@ -20,7 +20,7 @@ const App = () => {
     fetchContacts()
   }, [])
 
-  const matches = contacts 
+  const matches = contacts
     ? contacts.filter(contact => contact.name.includes(search))
     : []
 
@@ -57,14 +57,20 @@ const App = () => {
       const newContact = await contactsService.editContact(updatedContact.id, updatedContact)
       setContacts(contacts.map(contact => contact.id === newContact.id ? newContact : contact))
     }
-  }   
+  }
 
   const deleteContact = async contact => {
     if (window.confirm(`Delete ${contact.name}?`)) {
-      const deletedContact = await contactsService.deleteContact(contact.id)
-      setContacts(
-        contacts.filter(contact => deletedContact.id !== contact.id)
-      )
+      try {
+        const deletedContact = await contactsService.deleteContact(contact.id)
+        setContacts(
+          contacts.filter(contact => deletedContact.id !== contact.id)
+        )
+      // eslint-disable-next-line no-unused-vars
+      } catch (err) {
+        const message = `${contact.name} has already been deleted from your contacts`
+        toggleNotification(message, 'red')
+      }
     }
   }
 
@@ -83,7 +89,7 @@ const App = () => {
       {contacts && (
         <>
           <h1>Phonebook</h1>
-          {message && 
+          {message &&
             <Notification message={message} color={color} />
           }
           <Filter

@@ -1,11 +1,6 @@
 {
   "contacts": [
     {
-      "id": "3646",
-      "name": "Arto Hellas",
-      "phoneNumber": "848-625-4045"
-    },
-    {
       "id": "4206",
       "name": "Ada Lovelace",
       "phoneNumber": "1-416-931-5267"
