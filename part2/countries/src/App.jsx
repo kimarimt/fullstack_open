@@ -4,6 +4,7 @@ import Country from './components/Country'
 
 const App = () => {
   const [countries, setCountries] = useState(null)
+  const [selected, setSelected] = useState(null)
   const [search, setSearch] = useState('')
 
   useEffect(() => {
@@ -39,8 +40,24 @@ const App = () => {
             {matches.length > 10 &&
               <p>Too many matches, specify another filter</p>
             }
-            {matches.length > 1 && matches.length <= 10 && (
-              matches.map(country => <p key={country.cca2}>{country.name.common}</p>)
+            {selected && 
+              <>
+                <Country country={selected} />
+                <br />
+                <button onClick={() => setSelected(null)}>
+                  Back
+                </button>
+              </>
+            }
+            {matches.length > 1 && matches.length <= 10 && !selected && (
+              matches.map(country => 
+                <p key={country.cca2}>
+                  {country.name.common}{' '}
+                  <button onClick={() => setSelected(country)}>
+                    Show
+                  </button>
+                </p>
+              )
             )}
             {matches.length == 1 &&
               <Country country={matches[0]} />
