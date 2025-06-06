@@ -1,0 +1,16 @@
+{
+  "name": "phonebook",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "node --watch src/app.js"
+  },
+  "author": "Alec German <kimarimt@protonmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "morgan": "^1.10.0"
+  }
+}
