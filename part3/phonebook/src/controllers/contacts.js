@@ -2,7 +2,7 @@ import express from 'express'
 
 const router = express.Router()
 
-export const contacts = [
+export let contacts = [
   {
     "id": "1",
     "name": "Arto Hellas",
@@ -38,7 +38,20 @@ router.get('/:id', (req, res) => {
       .json({ error: 'contact not found' })
   }
 
-  return res.json(contact)
+  res.json(contact)
+})
+
+router.delete('/:id', (req, res) => {
+  const contact = contacts.find(contact => contact.id === req.params.id)
+
+  if (!contact) {
+    return res
+      .status(404)
+      .json({ error: 'contact not found' })
+  }
+
+  contacts = contacts.filter(c => c.id !== contact.id)
+  res.status(204).end()
 })
 
 export default router
