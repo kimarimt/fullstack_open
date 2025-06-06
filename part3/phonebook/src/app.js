@@ -5,6 +5,7 @@ import contactsRouter,
 const port = 3001
 const app = express()
 
+app.use(express.json())
 app.use('/api/contacts', contactsRouter)
 
 app.get('/info', (req, res) => {

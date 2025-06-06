@@ -25,6 +25,24 @@ export let contacts = [
   }
 ]
 
+const getRandomId = (min, max) => {
+  return Math.floor(Math.random() * (max - min)) + min 
+}
+
+router.post('/', (req, res) => {
+  const { name, phoneNumber } = req.body
+  const id = String(getRandomId(1, 1000))
+
+  const newContact = {
+    id,
+    name,
+    phoneNumber
+  }
+
+  contacts = contacts.concat(newContact)
+  res.json(newContact)
+})
+
 router.get('/', (req, res) => {
   res.json(contacts)
 })
