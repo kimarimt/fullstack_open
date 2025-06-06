@@ -1,0 +1,14 @@
+{
+  "name": "phonebook",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "node --watch src/app.js"
+  },
+  "author": "Alec German <kimarimt@protonmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
