@@ -31,6 +31,17 @@ const getRandomId = (min, max) => {
 
 router.post('/', (req, res) => {
   const { name, phoneNumber } = req.body
+  
+  if (!name || !phoneNumber) {
+    return res.status(400).json({ error: 'name and phone number fields are required' })
+  }
+
+  const contact = contacts.find(contact => contact.name === name) 
+
+  if (contact) {
+    return res.status(400).json({ error: `${name} is already in your contacts` })
+  }
+  
   const id = String(getRandomId(1, 1000))
 
   const newContact = {
