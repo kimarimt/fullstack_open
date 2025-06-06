@@ -2,7 +2,7 @@ import express from 'express'
 
 const router = express.Router()
 
-const contacts = [
+export const contacts = [
     { 
       "id": "1",
       "name": "Arto Hellas", 
