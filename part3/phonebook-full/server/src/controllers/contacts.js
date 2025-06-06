@@ -42,7 +42,7 @@ router.post('/', (req, res) => {
     return res.status(400).json({ error: `${name} is already in your contacts` })
   }
   
-  const id = String(getRandomId(1, 1000))
+  const id = String(getRandomId(1, 10000))
 
   const newContact = {
     id,

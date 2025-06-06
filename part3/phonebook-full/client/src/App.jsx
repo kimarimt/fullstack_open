@@ -34,10 +34,7 @@ const App = () => {
       return
     }
 
-    const id = Math.floor(Math.random() * 9999) + 1
-
     const newContact = {
-      id: String(id),
       name,
       phoneNumber
     }
@@ -62,9 +59,9 @@ const App = () => {
   const deleteContact = async contact => {
     if (window.confirm(`Delete ${contact.name}?`)) {
       try {
-        const deletedContact = await contactsService.deleteContact(contact.id)
+        await contactsService.deleteContact(contact.id)
         setContacts(
-          contacts.filter(contact => deletedContact.id !== contact.id)
+          contacts.filter(c => c.id !== contact.id)
         )
       // eslint-disable-next-line no-unused-vars
       } catch (err) {
