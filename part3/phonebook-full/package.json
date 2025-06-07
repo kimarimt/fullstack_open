@@ -1,5 +1,6 @@
 {
   "name": "phonebook-full",
+  "type": "module",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -11,6 +12,7 @@
   "author": "Alec German <kimarimt@protonmail.com>",
   "license": "MIT",
   "dependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "mongoose": "^8.15.1"
   }
 }
