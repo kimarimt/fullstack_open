@@ -26,32 +26,20 @@ export let contacts = [
   }
 ]
 
-const getRandomId = (min, max) => {
-  return Math.floor(Math.random() * (max - min)) + min 
-}
-
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { name, phoneNumber } = req.body
   
   if (!name || !phoneNumber) {
     return res.status(400).json({ error: 'name and phone number fields are required' })
   }
 
-  const contact = contacts.find(contact => contact.name === name) 
-
-  if (contact) {
-    return res.status(400).json({ error: `${name} is already in your contacts` })
-  }
-  
-  const id = String(getRandomId(1, 10000))
-
-  const newContact = {
-    id,
+  const newContact = Contact({
     name,
     phoneNumber
-  }
+  })
 
-  contacts = contacts.concat(newContact)
+  await newContact.save()
+  
   res.json(newContact)
 })
 
