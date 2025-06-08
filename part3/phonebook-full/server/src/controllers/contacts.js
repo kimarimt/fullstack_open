@@ -1,4 +1,5 @@
 import express from 'express'
+import Contact from '../models/contact.js'
 
 const router = express.Router()
 
@@ -54,17 +55,16 @@ router.post('/', (req, res) => {
   res.json(newContact)
 })
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  const contacts = await Contact.find({})
   res.json(contacts)
 })
 
-router.get('/:id', (req, res) => {
-  const contact = contacts.find(contact => contact.id === req.params.id)
+router.get('/:id', async (req, res) => {
+  const contact = await Contact.findById(req.params.id)
 
   if (!contact) {
-    return res
-      .status(404)
-      .json({ error: 'contact not found' })
+    return res.status(404).send({ error: 'contact not found' })
   }
 
   res.json(contact)

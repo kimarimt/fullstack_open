@@ -1,10 +1,21 @@
 import express from 'express'
 import morgan from 'morgan'
+import mongoose from 'mongoose'
+import config from './config/config.js'
 import contactsRouter,
 { contacts } from './controllers/contacts.js'
 
-const port = process.env.PORT || 3001
 const app = express()
+
+mongoose
+  .connect(config.mongoUri)
+  .then(result => {
+    console.log('MongoDB connection pool established')
+  })
+  .catch(err => {
+    console.error('error connection to MongoDB', err)
+  })
+
 
 app.use(express.static('dist'))
 app.use(express.json())
@@ -25,6 +36,6 @@ app.get('/info', (req, res) => {
   res.send(`<p>Phonebook has info for ${contacts.length} people</p><p>${currentDate.toDateString()} ${currentDate.toTimeString()}</p>`)
 })
 
-app.listen(port, () => {
-  console.log(`[server]: Listening at http://localhost:${port}`)
+app.listen(config.port, () => {
+  console.log(`[server]: Listening at http://localhost:${config.port}`)
 })
