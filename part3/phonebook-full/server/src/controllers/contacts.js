@@ -58,16 +58,14 @@ router.get('/:id', async (req, res) => {
   res.json(contact)
 })
 
-router.delete('/:id', (req, res) => {
-  const contact = contacts.find(contact => contact.id === req.params.id)
+router.delete('/:id', async (req, res) => {
+  const contact = await Contact.findById(req.params.id)
 
   if (!contact) {
-    return res
-      .status(404)
-      .json({ error: 'contact not found' })
+    return res.status(404).send({ error: 'contact not found' })
   }
 
-  contacts = contacts.filter(c => c.id !== contact.id)
+  await contact.deleteOne()
   res.status(204).end()
 })
 
