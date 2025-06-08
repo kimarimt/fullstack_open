@@ -2,6 +2,7 @@ import express from 'express'
 import morgan from 'morgan'
 import mongoose from 'mongoose'
 import config from './config/config.js'
+import middleware from './middleware/middleware.js'
 import contactsRouter,
 { contacts } from './controllers/contacts.js'
 
@@ -35,6 +36,9 @@ app.get('/info', (req, res) => {
 
   res.send(`<p>Phonebook has info for ${contacts.length} people</p><p>${currentDate.toDateString()} ${currentDate.toTimeString()}</p>`)
 })
+
+app.use(middleware.errorHandler)
+app.use(middleware.unknownEndpoint)
 
 app.listen(config.port, () => {
   console.log(`[server]: Listening at http://localhost:${config.port}`)

@@ -28,10 +28,6 @@ export let contacts = [
 
 router.post('/', async (req, res) => {
   const { name, phoneNumber } = req.body
-  
-  if (!name || !phoneNumber) {
-    return res.status(400).json({ error: 'name and phone number fields are required' })
-  }
 
   const newContact = Contact({
     name,
@@ -39,7 +35,6 @@ router.post('/', async (req, res) => {
   })
 
   await newContact.save()
-  
   res.json(newContact)
 })
 
@@ -60,11 +55,7 @@ router.get('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   const contact = await Contact.findById(req.params.id)
-
-  if (!contact) {
-    return res.status(404).send({ error: 'contact not found' })
-  }
-
+  
   await contact.deleteOne()
   res.status(204).end()
 })
