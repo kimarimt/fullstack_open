@@ -25,23 +25,27 @@ const App = () => {
     : []
 
   const addContact = async (name, phoneNumber) => {
-    const contactExists = contacts.find(contact =>
-      contact.name === name
-    )
+    try {
+      const contactExists = contacts.find(contact =>
+        contact.name === name
+      )
 
-    if (contactExists) {
-      editContact(contactExists, phoneNumber)
-      return
+      if (contactExists) {
+        editContact(contactExists, phoneNumber)
+        return
+      }
+
+      const newContact = {
+        name,
+        phoneNumber
+      }
+
+      const savedContact = await contactsService.saveContact(newContact)
+      setContacts(contacts.concat(savedContact))
+      toggleNotification(`${savedContact.name} saved to contacts`, 'green')
+    } catch (err) {
+      toggleNotification(err.response.data.error, 'red')
     }
-
-    const newContact = {
-      name,
-      phoneNumber
-    }
-
-    const savedContact = await contactsService.saveContact(newContact)
-    setContacts(contacts.concat(savedContact))
-    toggleNotification(`${savedContact.name} saved to contacts`, 'green')
   }
 
   const editContact = async (contact, newNumber) => {
@@ -63,7 +67,7 @@ const App = () => {
         setContacts(
           contacts.filter(c => c.id !== contact.id)
         )
-      // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
       } catch (err) {
         const message = `${contact.name} has already been deleted from your contacts`
         toggleNotification(message, 'red')

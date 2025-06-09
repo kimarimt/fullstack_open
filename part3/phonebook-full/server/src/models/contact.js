@@ -4,6 +4,7 @@ const contactSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    minLength: 3,
     unique: true
   },
   phoneNumber: {
