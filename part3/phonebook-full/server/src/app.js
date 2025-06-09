@@ -3,8 +3,8 @@ import morgan from 'morgan'
 import mongoose from 'mongoose'
 import config from './config/config.js'
 import middleware from './middleware/middleware.js'
-import contactsRouter,
-{ contacts } from './controllers/contacts.js'
+import Contact from './models/contact.js'
+import contactsRouter from './controllers/contacts.js'
 
 const app = express()
 
@@ -29,14 +29,14 @@ morgan.token('body', req => {
 
 app.use(morgan(':method :url :status :res[content-length] :response-time ms - :body'))
 
-app.use('/api/contacts', contactsRouter)
-
-app.get('/info', (req, res) => {
+app.get('/api/info', async (req, res) => {
+  const contacts = await Contact.countDocuments()
   const currentDate = new Date()
-
-  res.send(`<p>Phonebook has info for ${contacts.length} people</p><p>${currentDate.toDateString()} ${currentDate.toTimeString()}</p>`)
+  
+  res.send(`<p>Phonebook has info for ${contacts} people</p><p>${currentDate.toDateString()} ${currentDate.toTimeString()}</p>`)
 })
 
+app.use('/api/contacts', contactsRouter)
 app.use(middleware.errorHandler)
 app.use(middleware.unknownEndpoint)
 
