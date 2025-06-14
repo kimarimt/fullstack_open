@@ -3,13 +3,19 @@ import mongoose from 'mongoose'
 const contactSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
-    minLength: 3,
-    unique: true
+    required: [true, 'Contact name required'],
+    minLength: [3, 'Contact name must have at least 3 characters'],
+    unique: [true, 'Contact already exists']
   },
   phoneNumber: {
     type: String,
-    required: true
+    required: [true, 'Contact phone number required'],
+    validate: {
+      validator: (v) => {
+        return /\d{3}-\d{3}-\d{4}/.test(v)
+      },
+      message: props => `${props.value} is not a valid phone number!`
+    }
   }
 })
 
