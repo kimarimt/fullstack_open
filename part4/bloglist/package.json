@@ -13,7 +13,8 @@
   "dependencies": {
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "mongoose": "^8.15.2"
+    "mongoose": "^8.15.2",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^4.4.1",
