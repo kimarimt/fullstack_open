@@ -11,7 +11,9 @@
   "license": "MIT",
   "description": "Fullstack Open Bloglist project",
   "dependencies": {
-    "express": "^5.1.0"
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.15.2"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^4.4.1",

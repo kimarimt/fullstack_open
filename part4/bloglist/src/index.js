@@ -1,7 +1,6 @@
 import app from './app.js'
+import config from './config/config.js'
 
-const port = 3003
-
-app.listen(port, () => {
-  console.log(`[server] running at http://localhost:${port}`)
+app.listen(config.port, () => {
+  console.log(`[server] running at http://localhost:${config.port}`)
 })
