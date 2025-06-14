@@ -1,0 +1,21 @@
+{
+  "name": "bloglist",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "lint": "eslint ."
+  },
+  "author": "Alec German <kimarimt@protonmail.com>",
+  "license": "MIT",
+  "description": "Fullstack Open Bloglist project",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^4.4.1",
+    "eslint": "^9.29.0",
+    "globals": "^16.2.0"
+  }
+}
