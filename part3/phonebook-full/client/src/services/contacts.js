@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const baseUrl = '/api/contacts'
 
-const saveContact = async newContact => {
+const saveContact = async (newContact) => {
   const res = await axios.post(baseUrl, newContact)
   return res.data
 }
@@ -17,7 +17,7 @@ const editContact = async (id, newContact) => {
   return res.data
 }
 
-const deleteContact = async id => {
+const deleteContact = async (id) => {
   const res = await axios.delete(`${baseUrl}/${id}`)
   return res.data
 }
@@ -26,5 +26,5 @@ export default {
   saveContact,
   getContacts,
   editContact,
-  deleteContact
+  deleteContact,
 }

@@ -8,7 +8,7 @@ router.post('/', async (req, res) => {
 
   const newContact = Contact({
     name,
-    phoneNumber
+    phoneNumber,
   })
 
   await newContact.save()
@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   const update = { phoneNumber: req.body.phoneNumber }
-  const newContact = await Contact.findByIdAndUpdate(req.params.id, update, { new: true }) 
+  const newContact = await Contact.findByIdAndUpdate(req.params.id, update, { new: true })
 
   if (!newContact) {
     return res.status(404).send({ error: 'contact not found' })

@@ -27,7 +27,7 @@ const App = () => {
   const addContact = async (name, phoneNumber) => {
     try {
       const contactExists = contacts.find(contact =>
-        contact.name === name
+        contact.name === name,
       )
 
       if (contactExists) {
@@ -37,13 +37,14 @@ const App = () => {
 
       const newContact = {
         name,
-        phoneNumber
+        phoneNumber,
       }
 
       const savedContact = await contactsService.saveContact(newContact)
       setContacts(contacts.concat(savedContact))
       toggleNotification(`${savedContact.name} saved to contacts`, 'green')
-    } catch (err) {
+    }
+    catch (err) {
       toggleNotification(err.response.data.error, 'red')
     }
   }
@@ -52,7 +53,7 @@ const App = () => {
     if (window.confirm(`${contact.name} is already in your contacts, would you like to update the number`)) {
       const updatedContact = {
         ...contact,
-        phoneNumber: newNumber
+        phoneNumber: newNumber,
       }
 
       const newContact = await contactsService.editContact(updatedContact.id, updatedContact)
@@ -60,15 +61,15 @@ const App = () => {
     }
   }
 
-  const deleteContact = async contact => {
+  const deleteContact = async (contact) => {
     if (window.confirm(`Delete ${contact.name}?`)) {
       try {
         await contactsService.deleteContact(contact.id)
         setContacts(
-          contacts.filter(c => c.id !== contact.id)
+          contacts.filter(c => c.id !== contact.id),
         )
-        // eslint-disable-next-line no-unused-vars
-      } catch (err) {
+      }
+      catch (err) {
         const message = `${contact.name} has already been deleted from your contacts`
         toggleNotification(message, 'red')
       }
@@ -90,9 +91,8 @@ const App = () => {
       {contacts && (
         <>
           <h1>Phonebook</h1>
-          {message &&
-            <Notification message={message} color={color} />
-          }
+          {message
+            && <Notification message={message} color={color} />}
           <Filter
             search={search}
             onChange={({ target }) => setSearch(target.value)}

@@ -1,11 +1,11 @@
 const Filter = ({ search, onChange }) => (
   <>
-    <label htmlFor='search'>Search Contacts: </label>
+    <label htmlFor="search">Search Contacts: </label>
     <input
-      id='search'
-      name='search'
+      id="search"
+      name="search"
       onChange={onChange}
-      type='text'
+      type="text"
       value={search}
     />
   </>

@@ -1,11 +1,14 @@
 const errorHandler = (err, req, res, next) => {
   if (err.name === 'CastError') {
     return res.status(400).send({ error: 'malformatted id' })
-  } else if (err.name === 'TypeError' && err.message.includes('null')) {
+  }
+  else if (err.name === 'TypeError' && err.message.includes('null')) {
     return res.status(404).send({ error: 'resource not found' })
-  } else if (err.name === 'ValidationError') {
+  }
+  else if (err.name === 'ValidationError') {
     return res.status(400).send({ error: err.message })
-  } else if (err.name === 'MongoServerError' && err.message.includes('E1100')) {
+  }
+  else if (err.name === 'MongoServerError' && err.message.includes('E1100')) {
     return res.status(400).send({ error: 'contact already exists' })
   }
 
@@ -18,5 +21,5 @@ const unknownEndpoint = (req, res) => {
 
 export default {
   errorHandler,
-  unknownEndpoint
+  unknownEndpoint,
 }

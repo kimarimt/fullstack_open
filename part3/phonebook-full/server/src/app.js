@@ -10,18 +10,17 @@ const app = express()
 
 mongoose
   .connect(config.mongoUri)
-  .then(result => {
+  .then((result) => {
     console.log('MongoDB connection pool established')
   })
-  .catch(err => {
+  .catch((err) => {
     console.error('error connection to MongoDB', err)
   })
-
 
 app.use(express.static('dist'))
 app.use(express.json())
 
-morgan.token('body', req => {
+morgan.token('body', (req) => {
   if (req.method === 'POST') {
     return JSON.stringify(req.body)
   }
@@ -32,7 +31,7 @@ app.use(morgan(':method :url :status :res[content-length] :response-time ms - :b
 app.get('/api/info', async (req, res) => {
   const contacts = await Contact.countDocuments()
   const currentDate = new Date()
-  
+
   res.send(`<p>Phonebook has info for ${contacts} people</p><p>${currentDate.toDateString()} ${currentDate.toTimeString()}</p>`)
 })
 

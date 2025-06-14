@@ -5,7 +5,7 @@ const contactSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Contact name required'],
     minLength: [3, 'Contact name must have at least 3 characters'],
-    unique: [true, 'Contact already exists']
+    unique: [true, 'Contact already exists'],
   },
   phoneNumber: {
     type: String,
@@ -14,9 +14,9 @@ const contactSchema = new mongoose.Schema({
       validator: (v) => {
         return /\d{3}-\d{3}-\d{4}/.test(v)
       },
-      message: props => `${props.value} is not a valid phone number!`
-    }
-  }
+      message: props => `${props.value} is not a valid phone number!`,
+    },
+  },
 })
 
 contactSchema.set('toJSON', {
@@ -24,7 +24,7 @@ contactSchema.set('toJSON', {
     obj.id = obj._id.toString()
     delete obj._id
     delete obj.__v
-  }
+  },
 })
 
 export default mongoose.model('Contact', contactSchema)
