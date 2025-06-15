@@ -92,3 +92,35 @@ describe('favorite blog', () => {
     assert.deepStrictEqual(result, expected)
   })
 })
+
+describe('most blogs', () => {
+  test('mostBlogs returns the author with the most blogs', () => {
+    const expected = {
+      author: 'Robert C. Martin',
+      blogs: 3,
+    }
+    const result = listHelper.mostBlogs(blogList)
+    assert.deepStrictEqual(result, expected)
+  })
+
+  test('mostBlogs returns the first occurence when there are multiple authors with the most blogs', () => {
+    const blogs = [
+      ...blogList,
+      {
+        _id: '684ece54b2c5bef0b23bb8b6',
+        title: 'Substitution Processes',
+        author: 'Edsger W. Dijkstra',
+        url: 'https://www.cs.utexas.edu/~EWD/transcriptions/EWD00xx/EWD28.html',
+        likes: 2,
+        __v: 0,
+      },
+    ]
+
+    const expected = {
+      author: 'Edsger W. Dijkstra',
+      blogs: 3,
+    }
+    const result = listHelper.mostBlogs(blogs)
+    assert.deepStrictEqual(result, expected)
+  })
+})
