@@ -22,9 +22,18 @@ const mostBlogs = (blogs) => {
     .first()
 }
 
+const mostLikes = (blogs) => {
+  return _(blogs)
+    .groupBy('author')
+    .map((items, author) => ({ author, likes: _.sumBy(items, 'likes') }))
+    .orderBy('likes', 'desc')
+    .first()
+}
+
 export default {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 }

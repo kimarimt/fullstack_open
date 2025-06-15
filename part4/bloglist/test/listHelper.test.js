@@ -124,3 +124,27 @@ describe('most blogs', () => {
     assert.deepStrictEqual(result, expected)
   })
 })
+
+describe('most likes', () => {
+  test('mostLikes returns the author with the most likes across all their blogs', () => {
+    const expected = {
+      author: 'Robert C. Martin',
+      likes: 24,
+    }
+    const result = listHelper.mostLikes(blogList)
+    assert.deepStrictEqual(result, expected)
+  })
+
+  test('mostLikes returns the first author that has the most likes if there are multiple authors the most likes', () => {
+    const blogs = [...blogList]
+    blogs[4].likes -= 7
+
+    const expected = {
+      author: 'Edsger W. Dijkstra',
+      likes: 17,
+    }
+
+    const result = listHelper.mostLikes(blogs)
+    assert.deepStrictEqual(result, expected)
+  })
+})
