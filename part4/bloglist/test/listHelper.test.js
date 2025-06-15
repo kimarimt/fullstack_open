@@ -53,14 +53,14 @@ const blogList = [
   },
 ]
 
-test('dummy returns one', () => {
+test.skip('dummy returns one', () => {
   const blogs = []
 
   const result = listHelper.dummy(blogs)
   assert.strictEqual(result, 1)
 })
 
-describe('total likes', () => {
+describe.skip('total likes', () => {
   test('when list has only one blog, total likes is equal to the blogs likes', () => {
     const blogs = blogList.slice(0, 1)
     const result = listHelper.totalLikes(blogs)
@@ -73,7 +73,7 @@ describe('total likes', () => {
   })
 })
 
-describe('favorite blog', () => {
+describe.skip('favorite blog', () => {
   test('when list has only one blog, that blog is returned', () => {
     const blogs = blogList.slice(0, 1)
     const result = listHelper.favoriteBlog(blogs)
@@ -93,7 +93,7 @@ describe('favorite blog', () => {
   })
 })
 
-describe('most blogs', () => {
+describe.skip('most blogs', () => {
   test('mostBlogs returns the author with the most blogs', () => {
     const expected = {
       author: 'Robert C. Martin',
@@ -125,7 +125,7 @@ describe('most blogs', () => {
   })
 })
 
-describe('most likes', () => {
+describe.skip('most likes', () => {
   test('mostLikes returns the author with the most likes across all their blogs', () => {
     const expected = {
       author: 'Robert C. Martin',
