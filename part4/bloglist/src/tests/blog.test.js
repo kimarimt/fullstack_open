@@ -17,32 +17,6 @@ describe('BlogAPI test', () => {
     await Promise.all(blogPromises)
   })
 
-  describe('GET all blogs', () => {
-    test('blogs are returned as json', async () => {
-      await api
-        .get(baseUrl)
-        .expect(200)
-        .expect('Content-Type', /application\/json/)
-    })
-
-    test('all blogs are returned', async () => {
-      const res = await api.get(baseUrl)
-      assert.strictEqual(res.body.length, helper.initialBlogs.length)
-    })
-
-    test('a specific blog is within the returned blogs', async () => {
-      const res = await api.get(baseUrl)
-      const contents = res.body.map(b => b.title)
-      assert.strictEqual(contents.includes('React patterns'), true)
-    })
-
-    test('blog contains the \'id\' property', async () => {
-      const blogs = await helper.blogsInDB()
-      const firstBlog = blogs[0]
-      assert('id' in firstBlog)
-    })
-  })
-
   describe('POST new blog', () => {
     test('a valid blog is saved to the database', async () => {
       const newBlog = {
@@ -120,7 +94,55 @@ describe('BlogAPI test', () => {
     })
   })
 
-  describe('DELETE blog', async () => {
+  describe('GET all blogs', () => {
+    test('blogs are returned as json', async () => {
+      await api
+        .get(baseUrl)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    })
+
+    test('all blogs are returned', async () => {
+      const res = await api.get(baseUrl)
+      assert.strictEqual(res.body.length, helper.initialBlogs.length)
+    })
+
+    test('a specific blog is within the returned blogs', async () => {
+      const res = await api.get(baseUrl)
+      const contents = res.body.map(b => b.title)
+      assert.strictEqual(contents.includes('React patterns'), true)
+    })
+
+    test('blog contains the \'id\' property', async () => {
+      const blogs = await helper.blogsInDB()
+      const firstBlog = blogs[0]
+      assert('id' in firstBlog)
+    })
+  })
+
+  describe('PUT blog', () => {
+    test('a valid blog can be liked', async () => {
+      const blogs = await helper.blogsInDB()
+      const blogToUpdate = blogs[0]
+
+      const res = await api
+        .put(`${baseUrl}/${blogToUpdate.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      assert.strictEqual(res.body.likes, blogToUpdate.likes + 1)
+    })
+
+    test('liking a blog that isn\'t in the database returns a 404', async () => {
+      const id = '6850a0ff87fc0576bf3b7536'
+
+      await api
+        .put(`${baseUrl}/${id}`)
+        .expect(404)
+    })
+  })
+
+  describe('DELETE blog', () => {
     test('a blog with a valid id is successfully deleted', async () => {
       const blogsAtStart = await helper.blogsInDB()
       const blogToDelete = blogsAtStart[0]
