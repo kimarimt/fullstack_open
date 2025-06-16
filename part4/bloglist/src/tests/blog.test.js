@@ -41,28 +41,46 @@ describe('BlogAPI test', () => {
       const firstBlog = blogs[0]
       assert('id' in firstBlog)
     })
+  })
 
-    describe('POST new blog', () => {
-      test('a valid blog is saved to the database', async () => {
-        const newBlog = {
-          title: 'TDD harms architecture',
-          author: 'Robert C. Martin',
-          url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
-          likes: 0,
-        }
+  describe('POST new blog', () => {
+    test('a valid blog is saved to the database', async () => {
+      const newBlog = {
+        title: 'TDD harms architecture',
+        author: 'Robert C. Martin',
+        url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+        likes: 12,
+      }
 
-        await api
-          .post(baseUrl)
-          .send(newBlog)
-          .expect(201)
-          .expect('Content-Type', /application\/json/)
+      await api
+        .post(baseUrl)
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
 
-        const blogAtEnd = await helper.blogsInDB()
-        assert.strictEqual(blogAtEnd.length, helper.initialBlogs.length + 1)
+      const blogAtEnd = await helper.blogsInDB()
+      assert.strictEqual(blogAtEnd.length, helper.initialBlogs.length + 1)
 
-        const titles = blogAtEnd.map(b => b.title)
-        assert(titles.includes('TDD harms architecture'))
-      })
+      const titles = blogAtEnd.map(b => b.title)
+      assert(titles.includes('TDD harms architecture'))
+    })
+
+    test('blog\'s \'likes\' property defaults to 0, if it\'s missing from request body', async () => {
+      const newBlog = {
+        title: 'TDD harms architecture',
+        author: 'Robert C. Martin',
+        url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+      }
+
+      await api
+        .post(baseUrl)
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+      const blogAtEnd = await helper.blogsInDB()
+      const lastblog = blogAtEnd[blogAtEnd.length - 1]
+      assert.strictEqual(lastblog.likes, 0)
     })
   })
 
