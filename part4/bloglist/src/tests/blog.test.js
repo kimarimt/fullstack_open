@@ -120,6 +120,34 @@ describe('BlogAPI test', () => {
     })
   })
 
+  describe('DELETE blog', async () => {
+    test('a blog with a valid id is successfully deleted', async () => {
+      const blogsAtStart = await helper.blogsInDB()
+      const blogToDelete = blogsAtStart[0]
+
+      await api
+        .delete(`${baseUrl}/${blogToDelete.id}`)
+        .expect(204)
+
+      const blogsAtEnd = await helper.blogsInDB()
+      assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
+
+      const titles = blogsAtEnd.map(b => b.title)
+      assert(!titles.includes(blogToDelete.title))
+    })
+
+    test('deleting a blog not found in the database show return a status code of 404', async () => {
+      const id = '68503112d4e809462350fabd'
+
+      await api
+        .delete(`${baseUrl}/${id}`)
+        .expect(404)
+
+      const blogsAtEnd = await helper.blogsInDB()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+  })
+
   after(() => {
     mongoose.connection.close()
   })
