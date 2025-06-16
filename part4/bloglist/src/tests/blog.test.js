@@ -82,6 +82,42 @@ describe('BlogAPI test', () => {
       const lastblog = blogAtEnd[blogAtEnd.length - 1]
       assert.strictEqual(lastblog.likes, 0)
     })
+
+    test('blog is invalid if \'title\' is missing from request', async () => {
+      const newBlog = {
+        author: 'Robert C. Martin',
+        url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+      }
+
+      const res = await api
+        .post(baseUrl)
+        .send(newBlog)
+        .expect(400)
+
+      const blogsAtEnd = await helper.blogsInDB()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+
+      const errMessage = helper.getErrMessage(res, 'title: ')
+      assert.strictEqual(errMessage, 'blog title is required')
+    })
+
+    test('blog is invalid if \'url\' is missing from request', async () => {
+      const newBlog = {
+        title: 'TDD harms architecture',
+        author: 'Robert C. Martin',
+      }
+
+      const res = await api
+        .post(baseUrl)
+        .send(newBlog)
+        .expect(400)
+
+      const blogsAtEnd = await helper.blogsInDB()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+
+      const errMessage = helper.getErrMessage(res, 'url: ')
+      assert.strictEqual(errMessage, 'blog url is required')
+    })
   })
 
   after(() => {

@@ -19,6 +19,10 @@ const initialBlogs = [
   },
 ]
 
+const getErrMessage = (res, delimiter) => {
+  return res.body.error.split(delimiter)[1]
+}
+
 const blogsInDB = async () => {
   const blogs = await Blog.find({})
   return blogs.map(b => b.toJSON())
@@ -26,5 +30,6 @@ const blogsInDB = async () => {
 
 export default {
   initialBlogs,
+  getErrMessage,
   blogsInDB,
 }

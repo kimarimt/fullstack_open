@@ -1,9 +1,15 @@
 import mongoose from 'mongoose'
 
 const blogSchema = mongoose.Schema({
-  title: String,
+  title: {
+    type: String,
+    required: [true, 'blog title is required'],
+  },
   author: String,
-  url: String,
+  url: {
+    type: String,
+    required: [true, 'blog url is required'],
+  },
   likes: {
     type: Number,
     default: 0,
