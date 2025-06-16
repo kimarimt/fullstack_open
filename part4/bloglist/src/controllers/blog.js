@@ -15,6 +15,16 @@ router.get('/', async (req, res) => {
   res.json(blogs)
 })
 
+router.get('/:id', async (req, res) => {
+  const blog = await Blog.findById(req.params.id)
+
+  if (!blog) {
+    return res.status(404).send({ error: 'blog not found' })
+  }
+
+  res.json(blog)
+})
+
 router.put('/:id', async (req, res) => {
   const update = { $inc: { likes: 1 } }
   const options = { new: true }

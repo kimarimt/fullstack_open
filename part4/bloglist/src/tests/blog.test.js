@@ -120,6 +120,32 @@ describe('BlogAPI test', () => {
     })
   })
 
+  describe('GET single blog', () => {
+    test('A 200 status code is returned if blog is found', async () => {
+      const blogs = await helper.blogsInDB()
+      const firstBlog = blogs[0]
+
+      const res = await api
+        .get(`${baseUrl}/${firstBlog.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      const fetchedBlog = res.body
+      assert.deepStrictEqual(fetchedBlog, firstBlog)
+    })
+
+    test('A 404 status code is return if blog isn\'t found', async () => {
+      const id = '6850a435f4de65bf5b3f0f17'
+
+      await api
+        .get(`${baseUrl}/${id}`)
+        .expect(404)
+
+      const blogs = await helper.blogsInDB()
+      assert.strictEqual(blogs.length, helper.initialBlogs.length)
+    })
+  })
+
   describe('PUT blog', () => {
     test('a valid blog can be liked', async () => {
       const blogs = await helper.blogsInDB()
