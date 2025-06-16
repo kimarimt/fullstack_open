@@ -35,6 +35,12 @@ describe('BlogAPI test', () => {
       const contents = res.body.map(b => b.title)
       assert.strictEqual(contents.includes('React patterns'), true)
     })
+
+    test('blog contains the \'id\' property', async () => {
+      const blogs = await helper.blogsInDB()
+      const firstBlog = blogs[0]
+      assert.strictEqual('id' in firstBlog, true)
+    })
   })
 
   after(() => {
