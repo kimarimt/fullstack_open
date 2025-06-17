@@ -9,7 +9,7 @@ import helper from './test_helper.js'
 const api = supertest(app)
 const baseUrl = '/api/blogs'
 
-describe('BlogAPI test', () => {
+describe('BlogAPI testing', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
     const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
@@ -196,7 +196,7 @@ describe('BlogAPI test', () => {
     })
   })
 
-  after(() => {
-    mongoose.connection.close()
+  after(async () => {
+    await mongoose.connection.close()
   })
 })

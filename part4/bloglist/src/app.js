@@ -4,6 +4,7 @@ import morgan from 'morgan'
 import config from './utils/config.js'
 import middleware from './utils/middleware.js'
 import blogsRouter from './controllers/blog.js'
+import userRouter from './controllers/user.js'
 
 const app = express()
 
@@ -19,12 +20,13 @@ mongoose
 app.use(express.json())
 
 morgan.token('body', (req, res) => {
-  if (req.method === 'POST' || req.method === 'PUT') {
+  if (req.body && (req.method === 'POST' || req.method === 'PUT') && !('password' in req.body)) {
     return JSON.stringify(req.body)
   }
 })
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+app.use('/api/users', userRouter)
 app.use('/api/blogs', blogsRouter)
 app.use(middleware.errorHandler)
 app.use(middleware.unknownEndpoint)
