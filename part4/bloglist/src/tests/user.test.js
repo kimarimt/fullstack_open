@@ -40,6 +40,85 @@ describe('UserAPI testing', () => {
       const usernames = usersAtEnd.map(u => u.username)
       assert(usernames.includes(newUser.username))
     })
+
+    test('creating a user fails their username is missing', async () => {
+      const usersAtStart = await helper.usersInDB()
+
+      const newUser = {
+        name: 'Alec German',
+        password: '081093',
+      }
+
+      const res = await api
+        .post(baseUrl)
+        .send(newUser)
+        .expect(400)
+
+      const usersAtEnd = await helper.usersInDB()
+      assert.strictEqual(usersAtStart.length, usersAtEnd.length)
+
+      const errMessage = helper.getErrMessage(res, 'username: ')
+      assert.strictEqual(errMessage, 'username is required')
+    })
+
+    test('creating a user fails if username isn\'t unique', async () => {
+      const newUser = {
+        username: 'root',
+        name: 'John Doe',
+        password: 'randomPassword',
+      }
+
+      const res = await api
+        .post(baseUrl)
+        .send(newUser)
+        .expect(400)
+
+      assert.strictEqual(res.body.error, 'user already exists')
+    })
+
+    test('creating a user fails if username isn\'t at least three characters', async () => {
+      const newUser = {
+        username: 'j',
+        name: 'John Doe',
+        password: 'randomPassword',
+      }
+
+      const res = await api
+        .post(baseUrl)
+        .send(newUser)
+        .expect(400)
+
+      assert(res.body.error.includes('username must be a least 3 characters long'))
+    })
+
+    test('creating a user fails if password is missing', async () => {
+      const newUser = {
+        username: 'jdoe',
+        name: 'John Doe',
+      }
+
+      const res = await api
+        .post(baseUrl)
+        .send(newUser)
+        .expect(400)
+
+      assert.strictEqual(res.body.error, 'password is required')
+    })
+
+    test('creating a user fails if password is less than 3 characters', async () => {
+      const newUser = {
+        username: 'jdoe',
+        name: 'John Doe',
+        password: 'no',
+      }
+
+      const res = await api
+        .post(baseUrl)
+        .send(newUser)
+        .expect(400)
+
+      assert.strictEqual(res.body.error, 'password must be at least three characters long')
+    })
   })
 
   after(async () => {
