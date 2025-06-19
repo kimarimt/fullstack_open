@@ -1,9 +1,11 @@
 import assert from 'node:assert'
 import { describe, test, after, beforeEach } from 'node:test'
 import mongoose from 'mongoose'
+import bcrypt from 'bcrypt'
 import supertest from 'supertest'
 import app from '../app.js'
 import Blog from '../models/blog.js'
+import User from '../models/user.js'
 import helper from './test_helper.js'
 
 const api = supertest(app)
@@ -12,17 +14,35 @@ const baseUrl = '/api/blogs'
 describe('BlogAPI testing', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
-    const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('secret', 10)
+    const user = new User({ username: 'root', passwordHash })
+
+    const blogObjects = helper.initialBlogs.map(blog => new Blog({
+      ...blog,
+      user: user.id,
+    }))
+
     const blogPromises = blogObjects.map(blogObject => blogObject.save())
     await Promise.all(blogPromises)
+
+    user.blogs.push(blogObjects[0])
+    user.blogs.push(blogObjects[1])
+
+    await user.save()
   })
 
   describe('POST new blog', () => {
     test('a valid blog is saved to the database', async () => {
+      const usersAtStart = await helper.usersInDB()
+      const firstUser = usersAtStart[0]
+
       const newBlog = {
         title: 'TDD harms architecture',
         author: 'Robert C. Martin',
         url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+        userId: firstUser.id,
         likes: 12,
       }
 
@@ -35,14 +55,19 @@ describe('BlogAPI testing', () => {
       const blogAtEnd = await helper.blogsInDB()
       assert.strictEqual(blogAtEnd.length, helper.initialBlogs.length + 1)
 
-      const titles = blogAtEnd.map(b => b.title)
-      assert(titles.includes('TDD harms architecture'))
+      const usersAtEnd = await helper.usersInDB()
+      const updatedUser = usersAtEnd[0]
+      assert.strictEqual(updatedUser.blogs.length, firstUser.blogs.length + 1)
     })
 
     test('blog\'s \'likes\' property defaults to 0, if it\'s missing from request body', async () => {
+      const users = await helper.usersInDB()
+      const firstUser = users[0]
+
       const newBlog = {
         title: 'TDD harms architecture',
         author: 'Robert C. Martin',
+        userId: firstUser.id,
         url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
       }
 
@@ -55,11 +80,19 @@ describe('BlogAPI testing', () => {
       const blogAtEnd = await helper.blogsInDB()
       const lastblog = blogAtEnd[blogAtEnd.length - 1]
       assert.strictEqual(lastblog.likes, 0)
+
+      const usersAtEnd = await helper.usersInDB()
+      const updatedUser = usersAtEnd[0]
+      assert.strictEqual(updatedUser.blogs.length, firstUser.blogs.length + 1)
     })
 
     test('blog is invalid if \'title\' is missing from request', async () => {
+      const users = await helper.usersInDB()
+      const firstUser = users[0]
+
       const newBlog = {
         author: 'Robert C. Martin',
+        userId: firstUser.id,
         url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
       }
 
@@ -76,7 +109,11 @@ describe('BlogAPI testing', () => {
     })
 
     test('blog is invalid if \'url\' is missing from request', async () => {
+      const users = await helper.usersInDB()
+      const firstUser = users[0]
+
       const newBlog = {
+        userId: firstUser.id,
         title: 'TDD harms architecture',
         author: 'Robert C. Martin',
       }
@@ -91,6 +128,39 @@ describe('BlogAPI testing', () => {
 
       const errMessage = helper.getErrMessage(res, 'url: ')
       assert.strictEqual(errMessage, 'blog url is required')
+    })
+
+    test('blog is invalid if \'userId\' is missing from request', async () => {
+      const newBlog = {
+        title: 'TDD harms architecture',
+        author: 'Robert C. Martin',
+        url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+        likes: 12,
+      }
+
+      const res = await api
+        .post(baseUrl)
+        .send(newBlog)
+        .expect(400)
+
+      assert.strictEqual(res.body.error, 'userId is required')
+    })
+
+    test('blog is not created if user isn\'t found using userId', async () => {
+      const newBlog = {
+        title: 'TDD harms architecture',
+        author: 'Robert C. Martin',
+        url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+        userId: '68536fa5fb0301a078f19b94',
+        likes: 12,
+      }
+
+      const res = await api
+        .post(baseUrl)
+        .send(newBlog)
+        .expect(400)
+
+      assert.strictEqual(res.body.error, 'user not found')
     })
   })
 
@@ -118,6 +188,12 @@ describe('BlogAPI testing', () => {
       const firstBlog = blogs[0]
       assert('id' in firstBlog)
     })
+
+    test('blogs have a \'user\' property', async () => {
+      const blogs = await helper.blogsInDB()
+      const firstBlog = blogs[0]
+      assert('user' in firstBlog)
+    })
   })
 
   describe('GET single blog', () => {
@@ -143,6 +219,18 @@ describe('BlogAPI testing', () => {
 
       const blogs = await helper.blogsInDB()
       assert.strictEqual(blogs.length, helper.initialBlogs.length)
+    })
+
+    test('blogs have a \'user\' property', async () => {
+      const blogs = await helper.blogsInDB()
+      const firstBlog = blogs[0]
+
+      const res = await api
+        .get(`${baseUrl}/${firstBlog.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      assert('user' in res.body)
     })
   })
 

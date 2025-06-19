@@ -143,6 +143,18 @@ describe('UserAPI testing', () => {
 
       assert.deepStrictEqual(res.body.error, 'user not found')
     })
+
+    test('user has a \'blogs\' property', async () => {
+      const usersAtStart = await helper.usersInDB()
+      const user = usersAtStart[0]
+
+      const res = await api
+        .get(`${baseUrl}/${user.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      assert('blogs' in res.body)
+    })
   })
 
   after(async () => {

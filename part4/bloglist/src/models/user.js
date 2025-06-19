@@ -9,6 +9,12 @@ const userSchema = mongoose.Schema({
     minlength: [3, 'username must be a least 3 characters long'],
     unique: [true, 'user already exists'],
   },
+  blogs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Blog',
+    },
+  ],
 })
 
 userSchema.set('toJSON', {
