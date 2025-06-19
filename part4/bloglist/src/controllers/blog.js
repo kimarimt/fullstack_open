@@ -8,19 +8,9 @@ dotenv.config()
 
 const router = express.Router()
 
-const getTokenForm = (req) => {
-  const auth = req.get('authorization')
-
-  if (auth && auth.startsWith('Bearer ')) {
-    return auth.replace('Bearer ', '')
-  }
-
-  return null
-}
-
 router.post('/', async (req, res) => {
   const body = req.body
-  const decodedToken = jwt.verify(getTokenForm(req), process.env.SECRET)
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
 
   if (!decodedToken.id) {
     return res.status(401).json({ error: 'token invalid' })

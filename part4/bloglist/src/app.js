@@ -19,6 +19,7 @@ mongoose
   })
 
 app.use(express.json())
+app.use(middleware.tokenExtractor)
 
 morgan.token('body', (req, res) => {
   if (req.body && (req.method === 'POST' || req.method === 'PUT') && !('password' in req.body)) {

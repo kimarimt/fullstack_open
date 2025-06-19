@@ -33,7 +33,7 @@ describe('BlogAPI testing', () => {
     await user.save()
   })
 
-  describe('POST new blog', () => {
+  describe.only('POST new blog', () => {
     beforeEach(async () => {
       const { body } = await api
         .post('/api/login')
