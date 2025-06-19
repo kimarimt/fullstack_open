@@ -10,14 +10,13 @@ const router = express.Router()
 
 router.post('/', async (req, res) => {
   const body = req.body
-  const decodedToken = jwt.verify(req.token, process.env.SECRET)
 
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
   if (!decodedToken.id) {
     return res.status(401).json({ error: 'token invalid' })
   }
 
   const user = await User.findById(decodedToken.id)
-
   if (!user) {
     return res.status(400).send({ error: 'user not found' })
   }
@@ -67,12 +66,28 @@ router.put('/:id', async (req, res) => {
 })
 
 router.delete('/:id', async (req, res) => {
-  const deletedBlog = await Blog.findByIdAndDelete(req.params.id)
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return res.status(401).json({ error: 'token invalid' })
+  }
 
-  if (!deletedBlog) {
+  const user = await User.findById(decodedToken.id)
+  if (!user) {
+    return res.status(400).send({ error: 'user not found' })
+  }
+
+  const blog = await Blog.findById(req.params.id)
+  if (!blog) {
     return res.status(404).send({ error: 'blog not found' })
   }
 
+  if (blog.user.toString() !== user.id.toString()) {
+    return res.status(401).send({ error: 'user unauthorized' })
+  }
+
+  user.blogs.pull({ _id: blog.id })
+  await blog.deleteOne()
+  await user.save()
   res.status(204).end()
 })
 

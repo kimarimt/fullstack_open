@@ -33,13 +33,13 @@ describe('BlogAPI testing', () => {
     await user.save()
   })
 
-  describe.only('POST new blog', () => {
+  describe('POST new blog', () => {
     beforeEach(async () => {
       const { body } = await api
         .post('/api/login')
         .send({ username: 'root', password: 'secret' })
 
-      helper.token = body.token
+      helper.token = `Bearer ${body.token}`
     })
 
     test('a valid blog is saved to the database', async () => {
@@ -56,7 +56,7 @@ describe('BlogAPI testing', () => {
       await api
         .post(baseUrl)
         .send(newBlog)
-        .set('Authorization', `Bearer ${helper.token}`)
+        .set('Authorization', helper.token)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -78,7 +78,7 @@ describe('BlogAPI testing', () => {
       await api
         .post(baseUrl)
         .send(newBlog)
-        .set('Authorization', `Bearer ${helper.token}`)
+        .set('Authorization', helper.token)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -96,7 +96,7 @@ describe('BlogAPI testing', () => {
       const res = await api
         .post(baseUrl)
         .send(newBlog)
-        .set('Authorization', `Bearer ${helper.token}`)
+        .set('Authorization', helper.token)
         .expect(400)
 
       const blogsAtEnd = await helper.blogsInDB()
@@ -115,7 +115,7 @@ describe('BlogAPI testing', () => {
       const res = await api
         .post(baseUrl)
         .send(newBlog)
-        .set('Authorization', `Bearer ${helper.token}`)
+        .set('Authorization', helper.token)
         .expect(400)
 
       const blogsAtEnd = await helper.blogsInDB()
@@ -237,12 +237,21 @@ describe('BlogAPI testing', () => {
   })
 
   describe('DELETE blog', () => {
+    beforeEach(async () => {
+      const { body } = await api
+        .post('/api/login')
+        .send({ username: 'root', password: 'secret' })
+
+      helper.token = `Bearer ${body.token}`
+    })
+
     test('a blog with a valid id is successfully deleted', async () => {
       const blogsAtStart = await helper.blogsInDB()
       const blogToDelete = blogsAtStart[0]
 
       await api
         .delete(`${baseUrl}/${blogToDelete.id}`)
+        .set('Authorization', helper.token)
         .expect(204)
 
       const blogsAtEnd = await helper.blogsInDB()
@@ -257,10 +266,42 @@ describe('BlogAPI testing', () => {
 
       await api
         .delete(`${baseUrl}/${id}`)
+        .set('Authorization', helper.token)
         .expect(404)
 
       const blogsAtEnd = await helper.blogsInDB()
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+
+    test('blog is not deleted if user token isn\'t provided', async () => {
+      const blogsAtStart = await helper.blogsInDB()
+      const blogToDelete = blogsAtStart[0]
+
+      const res = await api
+        .delete(`${baseUrl}/${blogToDelete.id}`)
+        .expect(401)
+
+      assert.strictEqual(res.body.error, 'token invalid or it hasn\'t been provided')
+    })
+
+    test('blog is not deleted if the blog user id doesn\'t match the user\'s id', async () => {
+      const passwordHash = await bcrypt.hash('random', 10)
+      const user = new User({ username: 'jdoe', passwordHash })
+      await user.save()
+
+      const { body } = await api
+        .post('/api/login')
+        .send({ username: 'jdoe', password: 'random' })
+
+      const blogsAtStart = await helper.blogsInDB()
+      const blogToDelete = blogsAtStart[0]
+
+      const res = await api
+        .delete(`${baseUrl}/${blogToDelete.id}`)
+        .set('Authorization', `Bearer ${body.token}`)
+        .expect(401)
+
+      assert.strictEqual(res.body.error, 'user unauthorized')
     })
   })
 
