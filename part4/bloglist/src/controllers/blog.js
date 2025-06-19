@@ -1,36 +1,18 @@
 import express from 'express'
-import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
+import middleware from '../utils/middleware.js'
 import Blog from '../models/blog.js'
-import User from '../models/user.js'
-
-dotenv.config()
 
 const router = express.Router()
 
-router.post('/', async (req, res) => {
-  const body = req.body
-
-  const decodedToken = jwt.verify(req.token, process.env.SECRET)
-  if (!decodedToken.id) {
-    return res.status(401).json({ error: 'token invalid' })
-  }
-
-  const user = await User.findById(decodedToken.id)
-  if (!user) {
-    return res.status(400).send({ error: 'user not found' })
-  }
-
+router.post('/', middleware.userExtractor, async (req, res) => {
   const blog = new Blog({
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    user: user._id,
+    ...req.body,
+    user: req.user._id,
   })
 
   const savedBlog = await blog.save()
-  user.blogs.push(savedBlog.id)
-  await user.save()
+  req.user.blogs.push(savedBlog.id)
+  await req.user.save()
 
   res.status(201).json(savedBlog)
 })
@@ -65,29 +47,19 @@ router.put('/:id', async (req, res) => {
   return res.json(updatedBlog)
 })
 
-router.delete('/:id', async (req, res) => {
-  const decodedToken = jwt.verify(req.token, process.env.SECRET)
-  if (!decodedToken.id) {
-    return res.status(401).json({ error: 'token invalid' })
-  }
-
-  const user = await User.findById(decodedToken.id)
-  if (!user) {
-    return res.status(400).send({ error: 'user not found' })
-  }
-
+router.delete('/:id', middleware.userExtractor, async (req, res) => {
   const blog = await Blog.findById(req.params.id)
   if (!blog) {
     return res.status(404).send({ error: 'blog not found' })
   }
 
-  if (blog.user.toString() !== user.id.toString()) {
+  if (blog.user.toString() !== req.user.id.toString()) {
     return res.status(401).send({ error: 'user unauthorized' })
   }
 
-  user.blogs.pull({ _id: blog.id })
+  req.user.blogs.pull({ _id: blog.id })
   await blog.deleteOne()
-  await user.save()
+  await req.user.save()
   res.status(204).end()
 })
 

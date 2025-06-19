@@ -1,3 +1,9 @@
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+import User from '../models/user.js'
+
+dotenv.config()
+
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: 'unknown endpoint' })
 }
@@ -12,6 +18,21 @@ const tokenExtractor = (req, res, next) => {
     req.token = null
   }
 
+  next()
+}
+
+const userExtractor = async (req, res, next) => {
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
+  if (!decodedToken.id) {
+    req.user = null
+  }
+
+  const user = await User.findById(decodedToken.id)
+  if (!user) {
+    req.user = null
+  }
+
+  req.user = user
   next()
 }
 
@@ -38,5 +59,6 @@ const errorHandler = (err, req, res, next) => {
 export default {
   unknownEndpoint,
   tokenExtractor,
+  userExtractor,
   errorHandler,
 }
