@@ -3,7 +3,8 @@ import mongoose from 'mongoose'
 import morgan from 'morgan'
 import config from './utils/config.js'
 import middleware from './utils/middleware.js'
-import blogsRouter from './controllers/blog.js'
+import loginRouter from './controllers/login.js'
+import blogRouter from './controllers/blog.js'
 import userRouter from './controllers/user.js'
 
 const app = express()
@@ -26,8 +27,9 @@ morgan.token('body', (req, res) => {
 })
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+app.use('/api/login', loginRouter)
 app.use('/api/users', userRouter)
-app.use('/api/blogs', blogsRouter)
+app.use('/api/blogs', blogRouter)
 app.use(middleware.errorHandler)
 app.use(middleware.unknownEndpoint)
 
