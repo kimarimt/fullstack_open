@@ -26,7 +26,10 @@ morgan.token('body', (req, res) => {
   }
 })
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+if (process.env.NODE_ENV !== 'test') {
+  app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+}
+
 app.use('/api/login', loginRouter)
 app.use('/api/users', userRouter)
 app.use('/api/blogs', blogRouter)

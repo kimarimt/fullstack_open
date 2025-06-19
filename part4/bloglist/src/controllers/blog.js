@@ -1,25 +1,42 @@
 import express from 'express'
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
 import Blog from '../models/blog.js'
 import User from '../models/user.js'
 
+dotenv.config()
+
 const router = express.Router()
 
-router.post('/', async (req, res) => {
-  if (!('userId' in req.body)) {
-    return res.status(400).send({ error: 'userId is required' })
+const getTokenForm = (req) => {
+  const auth = req.get('authorization')
+
+  if (auth && auth.startsWith('Bearer ')) {
+    return auth.replace('Bearer ', '')
   }
 
-  const user = await User.findById(req.body.userId)
+  return null
+}
+
+router.post('/', async (req, res) => {
+  const body = req.body
+  const decodedToken = jwt.verify(getTokenForm(req), process.env.SECRET)
+
+  if (!decodedToken.id) {
+    return res.status(401).json({ error: 'token invalid' })
+  }
+
+  const user = await User.findById(decodedToken.id)
 
   if (!user) {
     return res.status(400).send({ error: 'user not found' })
   }
 
   const blog = new Blog({
-    title: req.body.title,
-    author: req.body.author,
-    url: req.body.url,
-    user: req.body.userId,
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    user: user._id,
   })
 
   const savedBlog = await blog.save()

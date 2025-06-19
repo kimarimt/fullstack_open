@@ -34,21 +34,29 @@ describe('BlogAPI testing', () => {
   })
 
   describe('POST new blog', () => {
-    test('a valid blog is saved to the database', async () => {
-      const usersAtStart = await helper.usersInDB()
-      const firstUser = usersAtStart[0]
+    beforeEach(async () => {
+      const { body } = await api
+        .post('/api/login')
+        .send({ username: 'root', password: 'secret' })
 
+      helper.token = body.token
+    })
+
+    test('a valid blog is saved to the database', async () => {
       const newBlog = {
         title: 'TDD harms architecture',
         author: 'Robert C. Martin',
         url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
-        userId: firstUser.id,
         likes: 12,
       }
+
+      const usersAtStart = await helper.usersInDB()
+      const firstUser = usersAtStart[0]
 
       await api
         .post(baseUrl)
         .send(newBlog)
+        .set('Authorization', `Bearer ${helper.token}`)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -61,44 +69,34 @@ describe('BlogAPI testing', () => {
     })
 
     test('blog\'s \'likes\' property defaults to 0, if it\'s missing from request body', async () => {
-      const users = await helper.usersInDB()
-      const firstUser = users[0]
-
       const newBlog = {
         title: 'TDD harms architecture',
         author: 'Robert C. Martin',
-        userId: firstUser.id,
         url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
       }
 
       await api
         .post(baseUrl)
         .send(newBlog)
+        .set('Authorization', `Bearer ${helper.token}`)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
       const blogAtEnd = await helper.blogsInDB()
       const lastblog = blogAtEnd[blogAtEnd.length - 1]
       assert.strictEqual(lastblog.likes, 0)
-
-      const usersAtEnd = await helper.usersInDB()
-      const updatedUser = usersAtEnd[0]
-      assert.strictEqual(updatedUser.blogs.length, firstUser.blogs.length + 1)
     })
 
     test('blog is invalid if \'title\' is missing from request', async () => {
-      const users = await helper.usersInDB()
-      const firstUser = users[0]
-
       const newBlog = {
         author: 'Robert C. Martin',
-        userId: firstUser.id,
         url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
       }
 
       const res = await api
         .post(baseUrl)
         .send(newBlog)
+        .set('Authorization', `Bearer ${helper.token}`)
         .expect(400)
 
       const blogsAtEnd = await helper.blogsInDB()
@@ -109,11 +107,7 @@ describe('BlogAPI testing', () => {
     })
 
     test('blog is invalid if \'url\' is missing from request', async () => {
-      const users = await helper.usersInDB()
-      const firstUser = users[0]
-
       const newBlog = {
-        userId: firstUser.id,
         title: 'TDD harms architecture',
         author: 'Robert C. Martin',
       }
@@ -121,6 +115,7 @@ describe('BlogAPI testing', () => {
       const res = await api
         .post(baseUrl)
         .send(newBlog)
+        .set('Authorization', `Bearer ${helper.token}`)
         .expect(400)
 
       const blogsAtEnd = await helper.blogsInDB()
@@ -130,7 +125,7 @@ describe('BlogAPI testing', () => {
       assert.strictEqual(errMessage, 'blog url is required')
     })
 
-    test('blog is invalid if \'userId\' is missing from request', async () => {
+    test('blog is not created if user token isn\'t provided', async () => {
       const newBlog = {
         title: 'TDD harms architecture',
         author: 'Robert C. Martin',
@@ -141,26 +136,9 @@ describe('BlogAPI testing', () => {
       const res = await api
         .post(baseUrl)
         .send(newBlog)
-        .expect(400)
+        .expect(401)
 
-      assert.strictEqual(res.body.error, 'userId is required')
-    })
-
-    test('blog is not created if user isn\'t found using userId', async () => {
-      const newBlog = {
-        title: 'TDD harms architecture',
-        author: 'Robert C. Martin',
-        url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
-        userId: '68536fa5fb0301a078f19b94',
-        likes: 12,
-      }
-
-      const res = await api
-        .post(baseUrl)
-        .send(newBlog)
-        .expect(400)
-
-      assert.strictEqual(res.body.error, 'user not found')
+      assert.strictEqual(res.body.error, 'token invalid or it hasn\'t been provided')
     })
   })
 
@@ -206,8 +184,10 @@ describe('BlogAPI testing', () => {
         .expect(200)
         .expect('Content-Type', /application\/json/)
 
-      const fetchedBlog = res.body
-      assert.deepStrictEqual(fetchedBlog, firstBlog)
+      delete res.body.user
+      delete firstBlog.user
+
+      assert.deepStrictEqual(res.body, firstBlog)
     })
 
     test('A 404 status code is return if blog isn\'t found', async () => {

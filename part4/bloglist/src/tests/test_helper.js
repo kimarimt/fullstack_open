@@ -1,6 +1,8 @@
 import Blog from '../models/blog.js'
 import User from '../models/user.js'
 
+let token = null
+
 const initialBlogs = [
   {
     _id: '5a422a851b54a676234d17f7',
@@ -35,6 +37,7 @@ const usersInDB = async () => {
 }
 
 export default {
+  token,
   initialBlogs,
   getErrMessage,
   blogsInDB,
