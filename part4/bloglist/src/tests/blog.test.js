@@ -249,16 +249,21 @@ describe('BlogAPI testing', () => {
       const blogsAtStart = await helper.blogsInDB()
       const blogToDelete = blogsAtStart[0]
 
+      const usersAtStart = await helper.usersInDB()
+      const firstUser = usersAtStart[0]
+
       await api
         .delete(`${baseUrl}/${blogToDelete.id}`)
         .set('Authorization', helper.token)
         .expect(204)
 
+      const usersAtEnd = await helper.usersInDB()
+      const updatedUser = usersAtEnd[0]
+
       const blogsAtEnd = await helper.blogsInDB()
       assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
 
-      const titles = blogsAtEnd.map(b => b.title)
-      assert(!titles.includes(blogToDelete.title))
+      assert.strictEqual(updatedUser.blogs.length, firstUser.blogs.length - 1)
     })
 
     test('deleting a blog not found in the database show return a status code of 404', async () => {
