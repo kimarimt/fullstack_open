@@ -27,4 +27,14 @@ router.post('/', async (req, res) => {
   res.status(201).send(savedUser)
 })
 
+router.get('/:id', async (req, res) => {
+  const user = await User.findById(req.params.id)
+
+  if (!user) {
+    return res.status(400).send({ error: 'user not found' })
+  }
+
+  res.json(user)
+})
+
 export default router

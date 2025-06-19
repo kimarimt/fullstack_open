@@ -121,6 +121,30 @@ describe('UserAPI testing', () => {
     })
   })
 
+  describe('GET user', () => {
+    test('user is found and returned as json', async () => {
+      const usersAtStart = await helper.usersInDB()
+      const user = usersAtStart[0]
+
+      const res = await api
+        .get(`${baseUrl}/${user.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      assert.deepStrictEqual(res.body, user)
+    })
+
+    test('user not found returned a 400 status code', async () => {
+      const id = '68535278327ec54fb1f8f56d'
+
+      const res = await api
+        .get(`${baseUrl}/${id}`)
+        .expect(400)
+
+      assert.deepStrictEqual(res.body.error, 'user not found')
+    })
+  })
+
   after(async () => {
     await mongoose.connection.close()
   })
