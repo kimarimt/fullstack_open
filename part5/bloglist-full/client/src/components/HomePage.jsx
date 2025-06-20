@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
 import blogService from '../services/blog'
 
-const HomePage = ({ user }) => {
+const HomePage = ({ user, onClick }) => {
   const [blogs, setBlogs] = useState(null)
 
   useEffect(() => {
     const fetchBlogs = async () => {
       const result = await blogService.getAll()
-      console.log(result)
       setBlogs(result)
     }
 
@@ -19,7 +18,7 @@ const HomePage = ({ user }) => {
       {blogs && (
         <>
           <h1>Blogs</h1>
-          <p>{user.name} logged in</p>
+          <p>{user.name} logged in <button onClick={onClick}>logout</button></p>
           <hr />
           {blogs.map(blog =>
             <p key={blog.id}>{blog.title} {blog.author}</p>
