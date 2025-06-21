@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import loginService from './services/login'
+import blogService from './services/blog'
 import LoginForm from './components/LoginForm'
 import HomePage from './components/HomePage'
 
@@ -11,6 +12,7 @@ const App = () => {
 
     if (userData) {
       const userObj = JSON.parse(userData)
+      blogService.setToken(userObj.token)
       setUser(userObj)
     }
   }, [])
@@ -21,6 +23,7 @@ const App = () => {
       window.localStorage.setItem(
         'blogAppUser', JSON.stringify(userData)
       )
+      blogService.setToken(userData.token)
       
       setUser(userData)
     } catch (err) {
@@ -30,6 +33,7 @@ const App = () => {
 
   const logout = () => {
     window.localStorage.removeItem('blogAppUser')
+    blogService.setToken(null)
     setUser(null)
   }
 

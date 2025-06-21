@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import blogService from '../services/blog'
+import BlogForm from './BlogForm'
 
 const HomePage = ({ user, onClick }) => {
   const [blogs, setBlogs] = useState(null)
@@ -13,13 +14,23 @@ const HomePage = ({ user, onClick }) => {
     fetchBlogs()
   }, [])
 
+  const addBlog = async (newBlog) => {
+    try {
+      const savedBlog = await blogService.addBlog(newBlog)
+      setBlogs(blogs.concat(savedBlog))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <>
       {blogs && (
         <>
-          <h1>Blogs</h1>
+          <h1>Blog App</h1>
           <p>{user.name} logged in <button onClick={onClick}>logout</button></p>
-          <hr />
+          <BlogForm addBlog={addBlog} />
+          <h2>Blogs</h2>
           {blogs.map(blog =>
             <p key={blog.id}>{blog.title} {blog.author}</p>
           )}
