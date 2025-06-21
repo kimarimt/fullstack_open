@@ -6,6 +6,8 @@ import HomePage from './components/HomePage'
 
 const App = () => {
   const [user, setUser] = useState(null)
+  const [message, setMessage] = useState(null)
+  const [color, setColor] = useState(null)
 
   useEffect(() => {
     const userData = window.localStorage.getItem('blogAppUser')
@@ -17,6 +19,16 @@ const App = () => {
     }
   }, [])
 
+  const toggleNotification = (msg, color) => {
+    setMessage(msg)
+    setColor(color)
+
+    setTimeout(() => {
+      setMessage(null)
+      setColor(null)
+    }, 3000)
+  }
+
   const loginUser = async (credentials) => {
     try {
       const userData = await loginService.login(credentials)
@@ -24,10 +36,10 @@ const App = () => {
         'blogAppUser', JSON.stringify(userData)
       )
       blogService.setToken(userData.token)
-      
+
       setUser(userData)
     } catch (err) {
-      console.log(err)
+      toggleNotification(err.response.data.error, 'red')
     }
   }
 
@@ -39,8 +51,15 @@ const App = () => {
 
   return (
     <>
-      {!user && <LoginForm login={loginUser} />}
-      {user &&  <HomePage user={user} onClick={logout} />}
+      {!user && <LoginForm
+        login={loginUser}
+        message={message}
+        color={color} />
+      }
+      {user && <HomePage
+        user={user}
+        onClick={logout} />
+      }
     </>
   )
 }

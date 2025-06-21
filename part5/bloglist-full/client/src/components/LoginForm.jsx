@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import Notification from './Notification'
 
-const LoginForm = ({ login }) => {
+const LoginForm = ({ login, message, color }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -14,6 +15,7 @@ const LoginForm = ({ login }) => {
   return (
     <>
       <h1>Log In</h1>
+      {message && color && <Notification message={message} color={color} />}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor='username'>Username: </label>
