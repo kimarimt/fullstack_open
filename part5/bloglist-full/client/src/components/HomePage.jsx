@@ -36,7 +36,6 @@ const HomePage = ({ user, onClick }) => {
     try {
       const updatedBlog = await blogService.editBlog(blogId)
       setBlogs(blogs.map(blog => blog.id === blogId ? updatedBlog : blog))
-      toggleNotification(`Liked ${updatedBlog.title}`, 'green')
     } catch (err) {
       toggleNotification(err.response.data.error, 'red')
     }
@@ -52,6 +51,10 @@ const HomePage = ({ user, onClick }) => {
     }, 3000)
   }
 
+  const blogsByLikes = blogs
+    ? blogs.toSorted((a, b) => b.likes - a.likes)
+    : []
+
   return (
     <>
       {blogs && (
@@ -63,7 +66,7 @@ const HomePage = ({ user, onClick }) => {
             <BlogForm addBlog={addBlog} />
           </Togglable>
           <h2>Blogs</h2>
-          {blogs.map(blog =>
+          {blogsByLikes.map(blog =>
             <BlogItem key={blog.id} blog={blog} onEdit={likeBlog} />
           )}
         </>
