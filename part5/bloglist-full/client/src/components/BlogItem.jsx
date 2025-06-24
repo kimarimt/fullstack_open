@@ -1,11 +1,16 @@
 import { useState } from 'react'
 
-const BlogItem = ({ blog, onEdit }) => {
+const BlogItem = ({ blog, user, onEdit, onDelete }) => {
   const [visible, setVisible] = useState(false)
 
   const styles = {
     border: '3px solid #ccc',
-    padding: '0 0.5rem',
+    padding: '0 0.75rem',
+    marginBottom: '1rem'
+  }
+
+  const buttonStyles = {
+    display: 'block',
     marginBottom: '1rem'
   }
 
@@ -24,6 +29,9 @@ const BlogItem = ({ blog, onEdit }) => {
             <button onClick={() => onEdit(blog.id)}>like</button>
           </p>
           <p>Added by {blog.user.name}</p>
+          {blog.user.username === user.username &&
+            <button style={buttonStyles} onClick={() => onDelete(blog.id)}>Delete</button>
+          }
         </div>
       )}
     </article>

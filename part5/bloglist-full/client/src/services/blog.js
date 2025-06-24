@@ -29,10 +29,21 @@ const editBlog = async (blogId) => {
   return res.data
 }
 
+const deleteBlog = async (blogId) => {
+  const config = {
+    headers: {
+      Authorization: token
+    },
+  }
+
+  await axios.delete(`${baseUrl}/${blogId}`, config)
+}
+
 export default {
   token,
   setToken,
   addBlog,
   getAll,
   editBlog,
+  deleteBlog
 }

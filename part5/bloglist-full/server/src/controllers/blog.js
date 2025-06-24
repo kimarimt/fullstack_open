@@ -13,6 +13,7 @@ router.post('/', middleware.userExtractor, async (req, res) => {
   const savedBlog = await blog.save()
   req.user.blogs.push(savedBlog.id)
   await req.user.save()
+  await Blog.populate(savedBlog, 'user')
 
   res.status(201).json(savedBlog)
 })
@@ -40,7 +41,7 @@ router.put('/:id', async (req, res) => {
   const options = { new: true }
   const updatedBlog = await Blog
     .findByIdAndUpdate(req.params.id, update, options)
-    .populate('user', { name: 1 })
+    .populate('user', { name: 1, username: 1 })
 
   if (!updatedBlog) {
     return res.status(404).send({ error: 'blog not found' })

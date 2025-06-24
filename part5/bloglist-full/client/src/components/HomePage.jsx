@@ -41,6 +41,15 @@ const HomePage = ({ user, onClick }) => {
     }
   }
 
+  const deleteBlog = async (blogId) => {
+    try {
+      await blogService.deleteBlog(blogId)
+      setBlogs(blogs.filter(blog => blog.id !== blogId))
+    } catch (err) {
+      toggleNotification(err.response.data.error, 'red')
+    }
+  }
+
   const toggleNotification = (msg, color) => {
     setMessage(msg)
     setColor(color)
@@ -67,7 +76,13 @@ const HomePage = ({ user, onClick }) => {
           </Togglable>
           <h2>Blogs</h2>
           {blogsByLikes.map(blog =>
-            <BlogItem key={blog.id} blog={blog} onEdit={likeBlog} />
+            <BlogItem 
+              key={blog.id} 
+              blog={blog} 
+              user={user}
+              onEdit={likeBlog}
+              onDelete={deleteBlog}
+            />
           )}
         </>
       )}
