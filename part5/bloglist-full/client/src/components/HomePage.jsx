@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import blogService from '../services/blog'
 import BlogForm from './BlogForm'
 import Notification from './Notification'
+import Togglable from './Toggable'
 
 const HomePage = ({ user, onClick }) => {
   const [blogs, setBlogs] = useState(null)
   const [message, setMessage] = useState(null)
   const [color, setColor] = useState(null)
+  const blogFormRef = useRef()
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -22,6 +24,7 @@ const HomePage = ({ user, onClick }) => {
       const savedBlog = await blogService.addBlog(newBlog)
       setBlogs(blogs.concat(savedBlog))
       const message = `${savedBlog.title} by ${savedBlog.author} added`
+      blogFormRef.current.toggleVisibility()
       toggleNotification(message, 'green')
     } catch (err) {
       toggleNotification(err.response.data.error, 'red')
@@ -45,7 +48,9 @@ const HomePage = ({ user, onClick }) => {
           <h1>Blog App</h1>
           {message && color && <Notification message={message} color={color} />}
           <p>{user.name} logged in <button onClick={onClick}>logout</button></p>
-          <BlogForm addBlog={addBlog} />
+          <Togglable buttonLabel='add blog' ref={blogFormRef}>
+            <BlogForm addBlog={addBlog} />
+          </Togglable>
           <h2>Blogs</h2>
           {blogs.map(blog =>
             <p key={blog.id}>{blog.title} {blog.author}</p>
