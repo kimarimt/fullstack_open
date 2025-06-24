@@ -38,7 +38,9 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   const update = { $inc: { likes: 1 } }
   const options = { new: true }
-  const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, update, options)
+  const updatedBlog = await Blog
+    .findByIdAndUpdate(req.params.id, update, options)
+    .populate('user', { name: 1 })
 
   if (!updatedBlog) {
     return res.status(404).send({ error: 'blog not found' })

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const BlogItem = ({ blog }) => {
+const BlogItem = ({ blog, onEdit }) => {
   const [visible, setVisible] = useState(false)
 
   const styles = {
@@ -21,7 +21,7 @@ const BlogItem = ({ blog }) => {
           <a href={blog.url} target='_blank'>{blog.url}</a>
           <p>
             likes {blog.likes}{' '}
-            <button>like</button>
+            <button onClick={() => onEdit(blog.id)}>like</button>
           </p>
           <p>Added by {blog.user.name}</p>
         </div>

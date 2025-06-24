@@ -32,6 +32,16 @@ const HomePage = ({ user, onClick }) => {
     }
   }
 
+  const likeBlog = async (blogId) => {
+    try {
+      const updatedBlog = await blogService.editBlog(blogId)
+      setBlogs(blogs.map(blog => blog.id === blogId ? updatedBlog : blog))
+      toggleNotification(`Liked ${updatedBlog.title}`, 'green')
+    } catch (err) {
+      toggleNotification(err.response.data.error, 'red')
+    }
+  }
+
   const toggleNotification = (msg, color) => {
     setMessage(msg)
     setColor(color)
@@ -54,7 +64,7 @@ const HomePage = ({ user, onClick }) => {
           </Togglable>
           <h2>Blogs</h2>
           {blogs.map(blog =>
-            <BlogItem key={blog.id} blog={blog} />
+            <BlogItem key={blog.id} blog={blog} onEdit={likeBlog} />
           )}
         </>
       )}
