@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import blogService from '../services/blog'
 import BlogForm from './BlogForm'
+import BlogItem from './BlogItem'
 import Notification from './Notification'
 import Togglable from './Toggable'
 
@@ -53,7 +54,7 @@ const HomePage = ({ user, onClick }) => {
           </Togglable>
           <h2>Blogs</h2>
           {blogs.map(blog =>
-            <p key={blog.id}>{blog.title} {blog.author}</p>
+            <BlogItem key={blog.id} blog={blog} />
           )}
         </>
       )}
