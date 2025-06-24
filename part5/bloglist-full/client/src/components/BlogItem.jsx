@@ -17,6 +17,7 @@ const BlogItem = ({ blog }) => {
       </h3>
       {visible && (
         <div>
+          <p>{blog.author}</p>
           <a href={blog.url} target='_blank'>{blog.url}</a>
           <p>
             likes {blog.likes}{' '}
