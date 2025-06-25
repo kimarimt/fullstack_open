@@ -16,15 +16,16 @@ const BlogItem = ({ blog, user, onEdit, onDelete }) => {
   }
 
   return (
-    <article style={styles}>
+    <article className='blog' style={styles}>
       <h3>
         {blog.title}
+        {' | '}
+        {blog.author}
         {' '}
         <button onClick={() => setVisible(!visible)}>{visible ? 'hide' : 'show'}</button>
       </h3>
       {visible && (
         <div>
-          <p>{blog.author}</p>
           <a href={blog.url} target='_blank'>{blog.url}</a>
           <p>
             likes
@@ -56,7 +57,10 @@ BlogItem.propTypes = {
     author: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
     likes: PropTypes.number.isRequired,
-    user: this.user,
+    user: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      username: PropTypes.string.isRequired,
+    }),
   }),
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
