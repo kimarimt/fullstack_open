@@ -33,12 +33,13 @@ const App = () => {
     try {
       const userData = await loginService.login(credentials)
       window.localStorage.setItem(
-        'blogAppUser', JSON.stringify(userData)
+        'blogAppUser', JSON.stringify(userData),
       )
       blogService.setToken(userData.token)
 
       setUser(userData)
-    } catch (err) {
+    }
+    catch (err) {
       toggleNotification(err.response.data.error, 'red')
     }
   }
@@ -51,15 +52,19 @@ const App = () => {
 
   return (
     <>
-      {!user && <LoginForm
-        login={loginUser}
-        message={message}
-        color={color} />
-      }
-      {user && <HomePage
-        user={user}
-        onClick={logout} />
-      }
+      {!user && (
+        <LoginForm
+          login={loginUser}
+          message={message}
+          color={color}
+        />
+      )}
+      {user && (
+        <HomePage
+          user={user}
+          onClick={logout}
+        />
+      )}
     </>
   )
 }

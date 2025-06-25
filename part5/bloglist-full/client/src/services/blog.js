@@ -11,7 +11,7 @@ const setToken = (newToken) => {
 const addBlog = async (blogObj) => {
   const config = {
     headers: {
-      Authorization: token
+      Authorization: token,
     },
   }
 
@@ -32,7 +32,7 @@ const editBlog = async (blogId) => {
 const deleteBlog = async (blogId) => {
   const config = {
     headers: {
-      Authorization: token
+      Authorization: token,
     },
   }
 
@@ -45,5 +45,5 @@ export default {
   addBlog,
   getAll,
   editBlog,
-  deleteBlog
+  deleteBlog,
 }

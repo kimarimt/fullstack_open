@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Notification from './Notification'
+import PropTypes from 'prop-types'
 
 const LoginForm = ({ login, message, color }) => {
   const [username, setUsername] = useState('')
@@ -40,11 +41,17 @@ const LoginForm = ({ login, message, color }) => {
           />
         </div>
         <div>
-          <button type="submit">login</button>
+          <button type='submit'>login</button>
         </div>
       </form>
     </>
   )
+}
+
+LoginForm.propTypes = {
+  login: PropTypes.func.isRequired,
+  message: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
 }
 
 export default LoginForm

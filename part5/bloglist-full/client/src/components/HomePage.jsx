@@ -4,6 +4,7 @@ import BlogForm from './BlogForm'
 import BlogItem from './BlogItem'
 import Notification from './Notification'
 import Togglable from './Toggable'
+import PropTypes from 'prop-types'
 
 const HomePage = ({ user, onClick }) => {
   const [blogs, setBlogs] = useState(null)
@@ -27,7 +28,8 @@ const HomePage = ({ user, onClick }) => {
       const message = `${savedBlog.title} by ${savedBlog.author} added`
       blogFormRef.current.toggleVisibility()
       toggleNotification(message, 'green')
-    } catch (err) {
+    }
+    catch (err) {
       toggleNotification(err.response.data.error, 'red')
     }
   }
@@ -36,7 +38,8 @@ const HomePage = ({ user, onClick }) => {
     try {
       const updatedBlog = await blogService.editBlog(blogId)
       setBlogs(blogs.map(blog => blog.id === blogId ? updatedBlog : blog))
-    } catch (err) {
+    }
+    catch (err) {
       toggleNotification(err.response.data.error, 'red')
     }
   }
@@ -45,7 +48,8 @@ const HomePage = ({ user, onClick }) => {
     try {
       await blogService.deleteBlog(blogId)
       setBlogs(blogs.filter(blog => blog.id !== blogId))
-    } catch (err) {
+    }
+    catch (err) {
       toggleNotification(err.response.data.error, 'red')
     }
   }
@@ -53,7 +57,7 @@ const HomePage = ({ user, onClick }) => {
   const toggleNotification = (msg, color) => {
     setMessage(msg)
     setColor(color)
- 
+
     setTimeout(() => {
       setMessage(null)
       setColor(null)
@@ -70,24 +74,39 @@ const HomePage = ({ user, onClick }) => {
         <>
           <h1>Blog App</h1>
           {message && color && <Notification message={message} color={color} />}
-          <p>{user.name} logged in <button onClick={onClick}>logout</button></p>
+          <p>
+            {user.name}
+            {' '}
+            logged in
+            {' '}
+            <button onClick={onClick}>logout</button>
+          </p>
           <Togglable buttonLabel='add blog' ref={blogFormRef}>
             <BlogForm addBlog={addBlog} />
           </Togglable>
           <h2>Blogs</h2>
-          {blogsByLikes.map(blog =>
-            <BlogItem 
-              key={blog.id} 
-              blog={blog} 
+          {blogsByLikes.map(blog => (
+            <BlogItem
+              key={blog.id}
+              blog={blog}
               user={user}
               onEdit={likeBlog}
               onDelete={deleteBlog}
             />
+          ),
           )}
         </>
       )}
     </>
   )
+}
+
+HomePage.propTypes = {
+  user: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+  }),
+  onClick: PropTypes.func.isRequired,
 }
 
 export default HomePage
