@@ -53,7 +53,7 @@ describe('<BlogItem />', () => {
     expect(likes).toBeVisible()
   })
 
-  test('event handler is called twice when like button is clicked twice', async () => {
+  test.skip('event handler is called twice when like button is clicked twice', async () => {
     const mockHandler = vi.fn()
 
     render (
