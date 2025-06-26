@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "test": "vitest run",
+    "test": "playwright test --project=chromium",
+    "test:report": "playwright show-report",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -17,10 +18,12 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
+    "@playwright/test": "^1.53.1",
     "@stylistic/eslint-plugin": "^5.0.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^24.0.4",
     "@types/prop-types": "^15.7.15",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
