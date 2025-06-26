@@ -24,6 +24,7 @@ const LoginForm = ({ login, message, color }) => {
             type='text'
             name='username'
             id='username'
+            data-testid='username'
             value={username}
             onChange={({ target }) => setUsername(target.value)}
             required
@@ -35,6 +36,7 @@ const LoginForm = ({ login, message, color }) => {
             type='text'
             name='password'
             id='password'
+            data-testid='password'
             value={password}
             onChange={({ target }) => setPassword(target.value)}
             required
