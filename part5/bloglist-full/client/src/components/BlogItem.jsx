@@ -16,7 +16,7 @@ const BlogItem = ({ blog, user, onEdit, onDelete }) => {
   }
 
   return (
-    <article className='blog' style={styles}>
+    <article className='blog-item' style={styles}>
       <h3>
         {blog.title}
         {' | '}
@@ -27,7 +27,7 @@ const BlogItem = ({ blog, user, onEdit, onDelete }) => {
       {visible && (
         <div>
           <a href={blog.url} target='_blank'>{blog.url}</a>
-          <p>
+          <p className='blog-likes'>
             likes
             {' '}
             {blog.likes}

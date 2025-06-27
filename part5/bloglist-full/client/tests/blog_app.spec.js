@@ -50,5 +50,22 @@ test.describe('Blog app', () => {
       await testHelper.addBlog(page, blog)
       await expect(page.getByText(`${blog.title} | ${blog.author}`)).toBeVisible()
     })
+
+    test('pressing the like button on specific blog increases it\'s count', async ({ page }) => {
+      const blog = {
+        title: '[ On | No ] syntactic support for error handling',
+        author: 'Robert Griesemer',
+        url: 'https://go.dev/blog/error-syntax',
+        likes: 0,
+      }
+
+      await testHelper.addBlog(page, blog)
+      await page.waitForSelector('.blog-item')
+      const blogs = await page.locator('.blog-item').all()
+      const firstBlog = blogs[0]
+      await firstBlog.getByRole('button', { name: 'show' }).click()
+      await firstBlog.getByRole('button', { name: 'like' }).click()
+      await expect(firstBlog.getByText(`likes ${blog.likes + 1}`)).toBeVisible()
+    })
   })
 })
