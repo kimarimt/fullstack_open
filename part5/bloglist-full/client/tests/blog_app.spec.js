@@ -41,13 +41,12 @@ test.describe('Blog app', () => {
       title: '[ On | No ] syntactic support for error handling',
       author: 'Robert Griesemer',
       url: 'https://go.dev/blog/error-syntax',
-      likes: 0,
+      likes: 6,
     }
 
     test.beforeEach(async ({ page }) => {
       await testHelper.loginWith(page, 'agerman', '081093')
       await testHelper.addBlog(page, blog)
-      await page.waitForSelector('.blog-item')
     })
 
     test('a blog is successfully added by a valid user', async ({ page }) => {
@@ -84,6 +83,39 @@ test.describe('Blog app', () => {
       const firstBlog = page.locator('.blog-item')
       await firstBlog.getByRole('button', { name: 'show' }).click()
       await expect(page.getByRole('button', { name: 'Delete' })).not.toBeVisible()
+    })
+
+    test('blogs are sorted by likes', async ({ page }) => {
+      const newBlog = {
+        title: 'More predictable benchmarking with testing.B.Loop',
+        author: 'Junyang Shao',
+        url: 'https://go.dev/blog/testing-b-loop',
+        likes: 10,
+      }
+
+      await testHelper.addBlog(page, newBlog)
+      await expect(page.locator('.blog-item')).toHaveCount(2)
+      const blogsAtStart = await page.locator('.blog-item').all()
+
+      const firstBlog = blogsAtStart[0]
+      await firstBlog.getByRole('button', { name: 'show' }).click()
+      await testHelper.likeBlog(firstBlog)
+      await testHelper.likeBlog(firstBlog)
+      await testHelper.likeBlog(firstBlog)
+
+      const lastBlog = blogsAtStart[1]
+      await lastBlog.getByRole('button', { name: 'show' }).click()
+      await testHelper.likeBlog(lastBlog)
+      await testHelper.likeBlog(lastBlog)
+      await testHelper.likeBlog(lastBlog)
+      await testHelper.likeBlog(lastBlog)
+      await testHelper.likeBlog(lastBlog)
+
+      const blogsAtEnd = await page.locator('.blog-item').all()
+      const blogMaxLikes = blogsAtEnd[0]
+
+      const headerText = await (await blogMaxLikes.getByTestId('header').innerText())
+      expect(headerText).toBe(`${newBlog.title} | ${newBlog.author} hide`)
     })
   })
 })

@@ -22,8 +22,14 @@ const createUser = async (request, user) => {
   })
 }
 
+const likeBlog = async (locator) => {
+  await locator.getByRole('button', { name: 'like' }).click()
+  await locator.waitFor()  
+}
+
 export default {
   loginWith,
   addBlog,
-  createUser
+  createUser,
+  likeBlog
 }

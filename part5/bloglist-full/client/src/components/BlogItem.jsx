@@ -17,7 +17,7 @@ const BlogItem = ({ blog, user, onEdit, onDelete }) => {
 
   return (
     <article className='blog-item' style={styles}>
-      <h3>
+      <h3 data-testid='header'>
         {blog.title}
         {' | '}
         {blog.author}
