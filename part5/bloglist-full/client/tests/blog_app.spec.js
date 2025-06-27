@@ -67,5 +67,21 @@ test.describe('Blog app', () => {
       await firstBlog.getByRole('button', { name: 'like' }).click()
       await expect(firstBlog.getByText(`likes ${blog.likes + 1}`)).toBeVisible()
     })
+
+    test('a blog is deleted when the delete button is clicked', async ({ page }) => {
+      const blog = {
+        title: '[ On | No ] syntactic support for error handling',
+        author: 'Robert Griesemer',
+        url: 'https://go.dev/blog/error-syntax',
+        likes: 0,
+      }
+
+      await testHelper.addBlog(page, blog)
+      await page.waitForSelector('.blog-item')
+      const firstBlog = page.locator('.blog-item')
+      await firstBlog.getByRole('button', { name: 'show' }).click()
+      await firstBlog.getByRole('button', { name: 'delete' }).click()
+      await expect(firstBlog).not.toBeVisible()
+    })
   })
 })
