@@ -6,13 +6,14 @@ const baseUrl = 'http://localhost:5173'
 test.describe('Blog app', () => {
   test.beforeEach(async ({ page, request }) => {
     await request.post(`${baseUrl}/api/testing/reset`)
-    await request.post(`${baseUrl}/api/users`, {
-      data: {
+    await testHelper.createUser(
+      request,
+      {
         name: 'Alec German',
         username: 'agerman',
         password: '081093'
       }
-    })
+    )
 
     await page.goto(baseUrl)
   })
@@ -36,30 +37,24 @@ test.describe('Blog app', () => {
   })
 
   test.describe('when logged in', () => {
+    const blog = {
+      title: '[ On | No ] syntactic support for error handling',
+      author: 'Robert Griesemer',
+      url: 'https://go.dev/blog/error-syntax',
+      likes: 0,
+    }
+
     test.beforeEach(async ({ page }) => {
       await testHelper.loginWith(page, 'agerman', '081093')
+      await testHelper.addBlog(page, blog)
+      await page.waitForSelector('.blog-item')
     })
 
     test('a blog is successfully added by a valid user', async ({ page }) => {
-      const blog = {
-        title: '[ On | No ] syntactic support for error handling',
-        author: 'Robert Griesemer',
-        url: 'https://go.dev/blog/error-syntax'
-      }
-
-      await testHelper.addBlog(page, blog)
       await expect(page.getByText(`${blog.title} | ${blog.author}`)).toBeVisible()
     })
 
     test('pressing the like button on specific blog increases it\'s count', async ({ page }) => {
-      const blog = {
-        title: '[ On | No ] syntactic support for error handling',
-        author: 'Robert Griesemer',
-        url: 'https://go.dev/blog/error-syntax',
-        likes: 0,
-      }
-
-      await testHelper.addBlog(page, blog)
       await page.waitForSelector('.blog-item')
       const blogs = await page.locator('.blog-item').all()
       const firstBlog = blogs[0]
@@ -69,19 +64,26 @@ test.describe('Blog app', () => {
     })
 
     test('a blog is deleted when the delete button is clicked', async ({ page }) => {
-      const blog = {
-        title: '[ On | No ] syntactic support for error handling',
-        author: 'Robert Griesemer',
-        url: 'https://go.dev/blog/error-syntax',
-        likes: 0,
-      }
-
-      await testHelper.addBlog(page, blog)
-      await page.waitForSelector('.blog-item')
       const firstBlog = page.locator('.blog-item')
       await firstBlog.getByRole('button', { name: 'show' }).click()
       await firstBlog.getByRole('button', { name: 'delete' }).click()
       await expect(firstBlog).not.toBeVisible()
+    })
+
+    test('delete button is hidden for users who didn\'t add the blog', async ({ page, request }) => {
+      const newUser = {
+        name: 'John Doe',
+        username: 'jdoe',
+        password: 'secret'
+      }
+
+      await testHelper.createUser(request, newUser)
+      await page.getByRole('button', { name: 'logout' }).click()
+      await testHelper.loginWith(page, newUser.username, newUser.password)
+
+      const firstBlog = page.locator('.blog-item')
+      await firstBlog.getByRole('button', { name: 'show' }).click()
+      await expect(page.getByRole('button', { name: 'Delete' })).not.toBeVisible()
     })
   })
 })
