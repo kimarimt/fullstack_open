@@ -12,13 +12,13 @@ const notficationSlice = createSlice({
 
 export const { setNotification } = notficationSlice.actions
 
-export const toggleNotification = (message) => {
+export const toggleNotification = (message, secs = 5000) => {
   return dispatch => {
     dispatch(setNotification(message))
 
     setTimeout(() => {
       dispatch(setNotification(null))
-    }, 5000)
+    }, secs)
   }
 }
 

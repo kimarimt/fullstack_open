@@ -12,7 +12,13 @@ const getAll = async () => {
   return res.data
 }
 
+const update = async (id, obj) => {
+  const res = await axios.put(`${baseUrl}/${id}`, obj)
+  return res.data
+}
+
 export default {
   create,
-  getAll
+  getAll,
+  update
 }
