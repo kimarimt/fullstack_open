@@ -5,7 +5,7 @@ const App = () => {
   return (
     <>
       <h1>Redux Anecdotes</h1>
-      <AnecdoteForm />      
+      <AnecdoteForm /> 
       <AnecdoteList />
     </>
   )

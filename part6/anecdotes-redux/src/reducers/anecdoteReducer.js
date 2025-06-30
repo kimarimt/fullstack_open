@@ -17,9 +17,7 @@ const toObject = (text) => {
   }
 }
 
-const initialState = {
-  anecdotes: anecdotesAtStart.map(toObject)
-}
+const initialState = anecdotesAtStart.map(toObject)
 
 export const createAnecdote = (text) => {
   return {
@@ -40,27 +38,21 @@ export const addVote = (id) => {
 const anecdoteReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'CREATE_ANECDOTE':
-      return {
-        ...state,
-        anecdotes: [...state.anecdotes, action.payload]
-      }
+      return [...state, action.payload]
     case 'ADD_VOTE': {
       const id = action.payload.id
-      const anecdote = state.anecdotes.find(a => a.id === id)
+      const anecdote = state.find(a => a.id === id)
 
       const updatedAnecdote = {
         ...anecdote,
         votes: anecdote.votes + 1
       }
 
-      const anecdotes = state.anecdotes.map(anecdote =>
+      const anecdotes = state.map(anecdote =>
         anecdote.id === id ? updatedAnecdote : anecdote
       )
 
-      return {
-        ...state,
-        anecdotes
-      }
+      return anecdotes
     }
     default:
       return state
