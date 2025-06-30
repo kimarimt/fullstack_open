@@ -21,9 +21,8 @@ const AnecdoteList = () => {
 
   const handleVote = (anecdote) => {
     dispatch(addVote(anecdote.id))
-
     const message = `You voted for '${anecdote.text}'`
-    toggleNotification(message, dispatch)
+    dispatch(toggleNotification(message))
   }
 
   return (

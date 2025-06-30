@@ -1,13 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export const toggleNotification = (message, dispatch) => {
-  dispatch(setNotification(message))
-
-  setTimeout(() => {
-    dispatch(setNotification(null))
-  }, 5000)
-}
-
 const notficationSlice = createSlice({
   name: 'notification',
   initialState: null,
@@ -19,4 +11,15 @@ const notficationSlice = createSlice({
 })
 
 export const { setNotification } = notficationSlice.actions
+
+export const toggleNotification = (message) => {
+  return dispatch => {
+    dispatch(setNotification(message))
+
+    setTimeout(() => {
+      dispatch(setNotification(null))
+    }, 5000)
+  }
+}
+
 export default notficationSlice.reducer
