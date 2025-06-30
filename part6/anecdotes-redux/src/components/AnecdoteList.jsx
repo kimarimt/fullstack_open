@@ -1,17 +1,22 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { addVote } from '../reducers/anecdoteReducer'
+import { createSelector } from '@reduxjs/toolkit'
+import { useDispatch, useSelector } from 'react-redux'
+import { addVote } from '../reducers/anecdotesReducer'
 import Filter from './Filter'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
-  
-  const anecdotes = useSelector(({ filter, anecdotes }) => {
+  const getFilter = (state) => state.filter
+  const getAnecdotes = (state) => state.anecdotes
+
+  const getFilteredAnecdotes = createSelector([getFilter, getAnecdotes], (filter, anecdotes) => {
     const sortedAnecdotes = anecdotes.toSorted((a, b) => b.votes - a.votes)
 
-    return filter 
+    return filter
       ? sortedAnecdotes.filter(a => a.text.includes(filter))
       : sortedAnecdotes
   })
+
+  const anecdotes = useSelector(getFilteredAnecdotes)
 
   return (
     <>
