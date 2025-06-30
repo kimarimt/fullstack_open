@@ -10,7 +10,7 @@ const notficationSlice = createSlice({
   }
 })
 
-export const { setNotification } = notficationSlice.actions
+const { setNotification } = notficationSlice.actions
 
 export const toggleNotification = (message, secs = 5000) => {
   return dispatch => {
