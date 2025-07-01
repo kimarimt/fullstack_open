@@ -15,7 +15,7 @@ const AnecdoteForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     const text = event.target.anecdote.value 
-    newAnecdoteMutation.mutate({ text, votes: 0 })
+    await newAnecdoteMutation.mutateAsync({ text, votes: 0 })
     event.target.anecdote.value = ''
   }
 
