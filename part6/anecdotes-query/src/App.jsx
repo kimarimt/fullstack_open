@@ -8,11 +8,11 @@ const App = () => {
     queryKey: ['anecdotes'],
     queryFn: getAnecdotes
   })
-  
+
   const handleVote = (anecdote) => {
     console.log(`you voted for ${anecdote.text}`)
   }
-  
+
   const anecdotes = data
 
   return (
@@ -28,7 +28,7 @@ const App = () => {
             <div key={anecdote.id}>
               <p>{anecdote.text}</p>
               <p>
-                has {anecdote.votes}
+                has {anecdote.votes}{' '}
                 <button onClick={() => handleVote(anecdote)}>vote</button>
               </p>
             </div>
