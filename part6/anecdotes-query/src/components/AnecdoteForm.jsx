@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createAnecdote } from '../services/anecdotes'
 
-const AnecdoteForm = () => {
+const AnecdoteForm = ({ toggleNotification }) => {
   const queryClient = useQueryClient()
 
   const newAnecdoteMutation = useMutation({
@@ -9,12 +9,13 @@ const AnecdoteForm = () => {
     onSuccess: (newAnecdote) => {
       const anecdotes = queryClient.getQueryData(['anecdotes'])
       queryClient.setQueryData(['anecdotes'], anecdotes.concat(newAnecdote))
+      toggleNotification(`'${newAnecdote.text}' added`)
     }
   })
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    const text = event.target.anecdote.value 
+    const text = event.target.anecdote.value
     await newAnecdoteMutation.mutateAsync({ text, votes: 0 })
     event.target.anecdote.value = ''
   }
