@@ -1,0 +1,17 @@
+ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+.anecdotes__list {
+  display: block;
+  list-style: initial;
+  padding-left: 40px;
+}
+
+li a {
+  margin-right: 8px;
+  text-decoration: none;
+}
+
