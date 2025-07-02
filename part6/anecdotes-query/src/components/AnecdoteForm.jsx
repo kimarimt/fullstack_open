@@ -10,6 +10,9 @@ const AnecdoteForm = ({ toggleNotification }) => {
       const anecdotes = queryClient.getQueryData(['anecdotes'])
       queryClient.setQueryData(['anecdotes'], anecdotes.concat(newAnecdote))
       toggleNotification(`'${newAnecdote.text}' added`)
+    },
+    onError: (error) => {
+      toggleNotification(error.response.data.error)
     }
   })
 
