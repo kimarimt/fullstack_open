@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import Menu from './components/Menu'
 import AnecdotesList from './components/AnecdotesList'
 import About from './components/About'
@@ -44,9 +45,11 @@ const App = () => {
     <>
       <h1>Software Anecdotes</h1>
       <Menu />
-      <AnecdotesList anecdotes={anecdotes} />
-      <About />
-      <NewAnecdoteForm addNew={addNew} />
+      <Routes>
+        <Route path='/' element={<AnecdotesList anecdotes={anecdotes} />} />
+        <Route path='/create' element={<NewAnecdoteForm addNew={addNew} />} />
+        <Route path='/about' element={<About />} />
+      </Routes>
       <Footer />
     </>
   )
