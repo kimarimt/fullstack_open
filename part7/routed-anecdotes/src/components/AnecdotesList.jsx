@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 const AnecdotesList = ({ anecdotes }) => {
   return (
     <>
@@ -5,7 +7,7 @@ const AnecdotesList = ({ anecdotes }) => {
       <ul className='anecdotes__list'>
         {anecdotes.map(anecdote =>
           <li key={anecdote.id}>
-            <p>{anecdote.content}</p>
+            <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
           </li>
         )}
       </ul>

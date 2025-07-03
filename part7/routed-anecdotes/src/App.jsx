@@ -1,12 +1,14 @@
 import { useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useMatch } from 'react-router-dom'
 import Menu from './components/Menu'
 import AnecdotesList from './components/AnecdotesList'
 import About from './components/About'
 import NewAnecdoteForm from './components/NewAnecdoteForm'
 import Footer from './components/Footer'
+import AnecdoteDetail from './components/AnecdoteDetail'
 
 const App = () => {
+    const match = useMatch('/anecdotes/:id')
     const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
@@ -41,11 +43,16 @@ const App = () => {
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
 
+  const anecdote = match
+    ? anecdotes.find(a => a.id === Number(match.params.id))
+    : null
+
   return (
     <>
       <h1>Software Anecdotes</h1>
       <Menu />
       <Routes>
+        <Route path='/anecdotes/:id' element={<AnecdoteDetail anecdote={anecdote} />} />
         <Route path='/' element={<AnecdotesList anecdotes={anecdotes} />} />
         <Route path='/create' element={<NewAnecdoteForm addNew={addNew} />} />
         <Route path='/about' element={<About />} />
