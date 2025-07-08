@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { Routes, Route, useMatch } from 'react-router-dom'
 import Menu from './components/Menu'
-import AnecdotesList from './components/AnecdotesList'
 import About from './components/About'
-import NewAnecdoteForm from './components/NewAnecdoteForm'
 import Footer from './components/Footer'
+import Notification from './components/Notification'
+import AnecdotesList from './components/AnecdotesList'
+import NewAnecdoteForm from './components/NewAnecdoteForm'
 import AnecdoteDetail from './components/AnecdoteDetail'
 
 const App = () => {
@@ -25,10 +26,12 @@ const App = () => {
       id: 2
     }
   ])
+  const [message, setMessage] = useState(null)
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    toggleNotification(`a new anecdote ${anecdote.content} created!`)
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -43,6 +46,14 @@ const App = () => {
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
 
+  const toggleNotification = (message, secs = 5000) => {
+    setMessage(message)
+
+    setTimeout(() => {
+      setMessage(null)
+    }, secs)
+  }
+
   const anecdote = match
     ? anecdotes.find(a => a.id === Number(match.params.id))
     : null
@@ -51,6 +62,7 @@ const App = () => {
     <>
       <h1>Software Anecdotes</h1>
       <Menu />
+      { message && <Notification message={message} /> }
       <Routes>
         <Route path='/anecdotes/:id' element={<AnecdoteDetail anecdote={anecdote} />} />
         <Route path='/' element={<AnecdotesList anecdotes={anecdotes} />} />
