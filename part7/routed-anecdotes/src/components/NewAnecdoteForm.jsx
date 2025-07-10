@@ -1,19 +1,19 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom' 
+import { useNavigate } from 'react-router-dom'
+import { useField } from '../utils/hooks'
 
 const NewAnecdoteForm = ({ addNew }) => {
   const navigate = useNavigate()
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const content = useField('content')
+  const author = useField('author')
+  const info = useField('info', 'url')
 
   const handleSubmit = (event) => {
     event.preventDefault()
 
     addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0,
     })
 
@@ -26,33 +26,15 @@ const NewAnecdoteForm = ({ addNew }) => {
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor='content'>Content: </label>
-          <input 
-            type='text' 
-            name='content'
-            id='content'
-            value={content}
-            onChange={({ target }) => setContent(target.value)}
-          />
+          <input {...content} />
         </div>
         <div>
           <label htmlFor='author'>Author: </label>
-          <input 
-            type='text' 
-            name='author'
-            id='author'
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
+          <input {...author} />
         </div>
         <div>
           <label htmlFor='info'>Link for more info: </label>
-          <input 
-            type='url' 
-            name='info'
-            id='info'
-            value={info}
-            onChange={({ target }) => setInfo(target.value)}
-          />
+          <input {...info} />
         </div>
         <button>add</button>
       </form>
