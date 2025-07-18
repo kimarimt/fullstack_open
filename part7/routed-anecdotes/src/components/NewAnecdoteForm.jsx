@@ -3,9 +3,9 @@ import { useField } from '../utils/hooks'
 
 const NewAnecdoteForm = ({ addNew }) => {
   const navigate = useNavigate()
-  const content = useField('content')
-  const author = useField('author')
-  const info = useField('info', 'url')
+  const { reset: contentReset, ...content } = useField('content')
+  const { reset: authorReset, ...author } = useField('author')
+  const { reset: infoReset, ...info } = useField('info', 'url')
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -18,6 +18,12 @@ const NewAnecdoteForm = ({ addNew }) => {
     })
 
     navigate('/')
+  }
+
+  const resetForm = () => {
+    contentReset()
+    authorReset()
+    infoReset()
   }
 
   return (
@@ -37,6 +43,7 @@ const NewAnecdoteForm = ({ addNew }) => {
           <input {...info} />
         </div>
         <button>add</button>
+        <button type='reset' onClick={resetForm}>reset</button>
       </form>
     </>
   )
