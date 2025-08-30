@@ -7,6 +7,7 @@ const App = () => {
 
   const [name, setName] = useState('')
   const [number, setNumber] = useState('')
+  const [search, setSearch] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -21,9 +22,22 @@ const App = () => {
     }
   }
 
+  const searchResults = persons.filter(p => p.name.includes(search))
+
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <div>
+        <label htmlFor='search'>Search Contacts: </label>
+        <input
+          type='text'
+          name='search'
+          id='search' 
+          value={search}
+          onChange={({ target }) => setSearch(target.value)}
+        />
+      </div>
+      <h2>New Contact</h2>
       <form onSubmit={addPerson}>
         <div>
           <label htmlFor='name'>Name: </label>
@@ -51,7 +65,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <>
-        {persons.map((person) => (
+        {searchResults.map((person) => (
           <p id={person.name}>{person.name} {person.number}</p>
         ))}
       </>
