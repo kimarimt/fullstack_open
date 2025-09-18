@@ -1,17 +1,19 @@
+import StatisticLine from './StatisticLine'
+
 const Statistics = ({ good, neutral, bad }) => {
   const all = good + neutral + bad
   const average = (good - bad) / all
   const positive = good / all * 100
 
   return (
-    <p>
-      good {good}<br />
-      neutral {neutral}<br />
-      bad {bad}<br />
-      all {all}<br />
-      average {average.toFixed(2)}<br />
-      positive {positive.toFixed(0)}%
-    </p>
+    <div>
+      <StatisticLine text='good' stat={good} />
+      <StatisticLine text='neutral' stat={neutral} />
+      <StatisticLine text='bad' stat={bad} />
+      <StatisticLine text='all' stat={all} />
+      <StatisticLine text='average' stat={average.toFixed(2)} />
+      <StatisticLine text='positive' stat={positive.toFixed(0)} />
+    </div>
   )
 }
 
