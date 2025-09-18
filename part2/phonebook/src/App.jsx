@@ -8,6 +8,12 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
+    
+    if (persons.find(p => p.name === name)) {
+      alert(`${name} already exists in your contacts`)
+      return
+    }
+
     setPersons(persons.concat({ name }))
     setName('')
   }
