@@ -1,7 +1,8 @@
 const StatisticLine = ({ text, stat }) => (
-  <div>
-    <span>{text} {stat}{text === 'positive' ? '%' : ''}</span>
-  </div>
+  <tr>
+    <td>{text}</td> 
+    <td>{stat}{text === 'positive' ? '%' : ''}</td>
+  </tr>
 )
 
 export default StatisticLine

@@ -6,14 +6,16 @@ const Statistics = ({ good, neutral, bad }) => {
   const positive = good / all * 100
 
   return (
-    <div>
-      <StatisticLine text='good' stat={good} />
-      <StatisticLine text='neutral' stat={neutral} />
-      <StatisticLine text='bad' stat={bad} />
-      <StatisticLine text='all' stat={all} />
-      <StatisticLine text='average' stat={average.toFixed(2)} />
-      <StatisticLine text='positive' stat={positive.toFixed(0)} />
-    </div>
+    <table>
+      <tbody>
+        <StatisticLine text='good' stat={good} />
+        <StatisticLine text='neutral' stat={neutral} />
+        <StatisticLine text='bad' stat={bad} />
+        <StatisticLine text='all' stat={all} />
+        <StatisticLine text='average' stat={average.toFixed(2)} />
+        <StatisticLine text='positive' stat={positive.toFixed(0)} />
+      </tbody>
+    </table>
   )
 }
 
