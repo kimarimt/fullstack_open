@@ -2,11 +2,18 @@ import { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '1-555-728-5177' }
+    { name: 'Arto Hellas', number: '1-555-728-5177', id: 1 },
+    { name: 'Ada Lovelace', number: '1-555-834-4065', id: 2 },
+    { name: 'Dan Abramov', number: '1-555-744-9406', id: 3 },
+    { name: 'Mary Poppendieck', number: '1-555-564-3101', id: 4 }
+
   ])
   
   const [name, setName] = useState('')
   const [number, setNumber] = useState('')
+  const [filter, setFilter] = useState('')
+
+  const filteredContacts = persons.filter(p => p.name.includes(filter))
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -24,6 +31,16 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <div>
+        <label htmlFor='search'>Search Contacts: </label>
+        <input 
+          id='search'
+          type='text'
+          value={filter}
+          onChange={({ target }) => setFilter(target.value)} 
+        />
+      </div>
+      <h2>Add Contact</h2>
       <form onSubmit={addPerson}>
         <div>
           <label htmlFor='name'>Name: </label>
@@ -48,11 +65,9 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person => (
-        <div key={person.name}>
-          <span>{person.name} {person.number}</span>
-        </div>
-      ))}
+      {filteredContacts.map(person => 
+        <p key={person.id}>{person.name} {person.number}</p>
+      )}
     </div>
   )
 }
