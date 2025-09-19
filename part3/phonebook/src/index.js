@@ -1,6 +1,6 @@
 import express from 'express'
 
-const persons = [
+let persons = [
   {
     id: '1',
     name: 'Arto Hellas',
@@ -47,6 +47,20 @@ app.get(`${baseUrl}/:id`, (req, res) => {
   }
 
   res.json(person)
+})
+
+app.delete(`${baseUrl}/:id`, (req, res) => {
+  const id = req.params.id
+  const person = persons.find(person => person.id === id)
+
+  if (!person) {
+    return res.status(404).json({
+      error: 'person not found'
+    })
+  }
+
+  persons = persons.filter(person => person.id !== id)
+  res.status(204).end()
 })
 
 app.listen(port, () => {
