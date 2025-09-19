@@ -24,6 +24,7 @@ const persons = [
 ]
 
 const app = express()
+const baseUrl = '/api/persons'
 const port = 3001
 
 app.get('/info', (req, res) => {
@@ -31,8 +32,21 @@ app.get('/info', (req, res) => {
   res.send(`Phonebook has info for ${persons.length} people\n${current}`)
 })
 
-app.get('/api/persons', (req, res) => {
+app.get(baseUrl, (req, res) => {
   res.json(persons)
+})
+
+app.get(`${baseUrl}/:id`, (req, res) => {
+  const id = req.params.id
+  const person = persons.find(person => person.id === id)
+
+  if (!person) {
+    return res.status(404).json({
+      error: 'person not found'
+    })
+  }
+
+  res.json(person)
 })
 
 app.listen(port, () => {
