@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import countryService from './services/country'
 import CountryDetails from './components/CountryDetails'
+import countryService from './services/country'
 
 const App = () => {
   const [searchQuery, setSearchQuery] = useState('')
