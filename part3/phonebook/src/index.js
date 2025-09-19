@@ -26,6 +26,11 @@ const persons = [
 const app = express()
 const port = 3001
 
+app.get('/info', (req, res) => {
+  const current = new Date().toString()
+  res.send(`Phonebook has info for ${persons.length} people\n${current}`)
+})
+
 app.get('/api/persons', (req, res) => {
   res.json(persons)
 })
