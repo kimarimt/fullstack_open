@@ -21,10 +21,12 @@ const App = () => {
     fetchPersons()
   }, [])
 
-  const addPerson = async ({ name, number }) => {    
-    if (persons.find(p => p.name === name)) {
-      alert(`${name} already exists in your contacts`)
-      return false
+  const addPerson = async ({ name, number }) => {
+    const person = persons.find(p => p.name === name)
+    
+    if (person && window.confirm(`${person.name} already exists in your phonebook, would you update their number?`)) {
+      editPerson(person, number)
+      return
     }
 
     const personObj = {
@@ -35,7 +37,16 @@ const App = () => {
 
     const savedPerson = await personService.addPerson(personObj)
     setPersons(persons.concat(savedPerson))
-    return true
+  }
+
+  const editPerson = async (person, newNumber) => {
+    const newPersonObj = {
+      ...person,
+      number: newNumber
+    }
+
+    const updatedPerson = await personService.editPerson(person.id, newPersonObj)
+    setPersons(persons.map(p => p.id === updatedPerson.id ? updatedPerson : p))
   }
 
   const deletePerson = async (id) => {

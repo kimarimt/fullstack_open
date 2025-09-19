@@ -6,13 +6,9 @@ const PersonForm = ({ addPerson }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-
-    const isSaved = addPerson({ name, number })
-
-    if (isSaved) {
-      setName('')
-      setNumber('')
-    }
+    addPerson({ name, number })
+    setName('')
+    setNumber('')
   }
 
   return (

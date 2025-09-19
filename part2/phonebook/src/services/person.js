@@ -12,6 +12,11 @@ const getPersons = async () => {
   return response.data
 }
 
+const editPerson = async (id, newPersonObj) => {
+  const response = await axios.put(`${PERSONS_API}/${id}`, newPersonObj)
+  return response.data
+}
+
 const deletePerson = async (id) => {
   await axios.delete(`${PERSONS_API}/${id}`)
 }
@@ -19,5 +24,6 @@ const deletePerson = async (id) => {
 export default {
   addPerson,
   getPersons,
+  editPerson,
   deletePerson
 }
