@@ -21,19 +21,20 @@ const App = () => {
     fetchPersons()
   }, [])
 
-  const addPerson = ({ name, number }) => {    
+  const addPerson = async ({ name, number }) => {    
     if (persons.find(p => p.name === name)) {
       alert(`${name} already exists in your contacts`)
       return false
     }
 
-    const newContact = {
-      id: persons.length + 1,
+    const personObj = {
+      id: String(persons.length + 1),
       name,
       number
     }
 
-    setPersons(persons.concat(newContact))
+    const savedPerson = await personService.addPerson(personObj)
+    setPersons(persons.concat(savedPerson))
     return true
   }
 
