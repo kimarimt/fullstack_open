@@ -38,6 +38,15 @@ const App = () => {
     return true
   }
 
+  const deletePerson = async (id) => {
+    const person = persons.find(p => p.id === id)
+
+    if (window.confirm(`Delete ${person.name}`)) {
+      await personService.deletePerson(person.id)
+      setPersons(persons.filter(p => p.id !== person.id))
+    }
+  }
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -48,7 +57,12 @@ const App = () => {
       <h2>Add Contact</h2>
       <PersonForm addPerson={addPerson} />
       <h2>Numbers</h2>
-      {filteredContacts && <Persons persons={filteredContacts} />}
+      {filteredContacts && 
+        <Persons 
+          persons={filteredContacts} 
+          onClick={deletePerson}
+        />
+      }
     </div>
   )
 }

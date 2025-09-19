@@ -12,7 +12,12 @@ const getPersons = async () => {
   return response.data
 }
 
+const deletePerson = async (id) => {
+  await axios.delete(`${PERSONS_API}/${id}`)
+}
+
 export default {
   addPerson,
-  getPersons
+  getPersons,
+  deletePerson
 }
