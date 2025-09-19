@@ -25,18 +25,34 @@ let persons = [
 
 const app = express()
 const baseUrl = '/api/persons'
+const baseUrlId = `${baseUrl}/:id`
 const port = 3001
+
+app.use(express.json())
 
 app.get('/info', (req, res) => {
   const current = new Date().toString()
   res.send(`Phonebook has info for ${persons.length} people\n${current}`)
 })
 
+app.post(baseUrl, (req, res) => {
+  const { name, number } = req.body
+  
+  const newPerson = {
+    id: String(Math.floor(Math.random() * (10000 - 100)) + 100),
+    name,
+    number
+  }
+
+  persons = persons.concat(newPerson)
+  res.status(201).json(newPerson)
+})
+
 app.get(baseUrl, (req, res) => {
   res.json(persons)
 })
 
-app.get(`${baseUrl}/:id`, (req, res) => {
+app.get(baseUrlId, (req, res) => {
   const id = req.params.id
   const person = persons.find(person => person.id === id)
 
@@ -49,7 +65,7 @@ app.get(`${baseUrl}/:id`, (req, res) => {
   res.json(person)
 })
 
-app.delete(`${baseUrl}/:id`, (req, res) => {
+app.delete(baseUrlId, (req, res) => {
   const id = req.params.id
   const person = persons.find(person => person.id === id)
 
