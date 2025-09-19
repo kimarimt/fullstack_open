@@ -55,12 +55,17 @@ const App = () => {
     toggleNotification(`Updated number for ${updatedPerson.name}`)
   }
 
-  const deletePerson = async (id) => {
+  const deletePerson = (id) => {
     const person = persons.find(p => p.id === id)
 
     if (window.confirm(`Delete ${person.name}`)) {
-      await personService.deletePerson(person.id)
-      setPersons(persons.filter(p => p.id !== person.id))
+      personService.deletePerson(person.id)
+        .then(() => {
+          setPersons(persons.filter(p => p.id !== person.id))
+        })
+        .catch(() => {
+          toggleNotification(`${person.name} doesn't exist in your contacts`, 'red')
+        })
     }
   }
 
