@@ -30,7 +30,14 @@ const baseUrlId = `${baseUrl}/:id`
 const port = 3001
 
 app.use(express.json())
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
+
+morgan.token('body', (req, res) => {
+  if (req.method === 'POST') {
+    return JSON.stringify(req.body)
+  }
+})
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.get('/info', (req, res) => {
   const current = new Date().toString()
