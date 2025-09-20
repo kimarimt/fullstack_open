@@ -1,0 +1,19 @@
+{
+  "persons": [
+    {
+      "id": "1",
+      "name": "Arto Hellas",
+      "number": "1-248-344-1933"
+    },
+    {
+      "id": "2",
+      "name": "Ada Lovelace",
+      "number": "1-555-834-4065"
+    },
+    {
+      "id": "3",
+      "name": "Dan Abramov",
+      "number": "1-555-744-9406"
+    }
+  ]
+}
