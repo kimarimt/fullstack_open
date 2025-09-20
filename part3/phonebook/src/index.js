@@ -37,6 +37,25 @@ app.get('/info', (req, res) => {
 
 app.post(baseUrl, (req, res) => {
   const { name, number } = req.body
+
+  if (!name) {
+    return res.status(400).send({
+      error: 'name is required'
+    })
+  }
+
+  if (!number) {
+    return res.status(400).send({
+      error: 'number is required'
+    })    
+  }
+
+  const person = persons.find(person => person.name === name)
+  if (person) {
+    return res.status(400).send({
+      error: 'name must be unique'
+    })   
+  }
   
   const newPerson = {
     id: String(Math.floor(Math.random() * (10000 - 100)) + 100),
