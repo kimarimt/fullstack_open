@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const PERSONS_API = 'http://localhost:3001/persons'
+const PERSONS_API = 'http://localhost:3001/api/persons'
 
 const addPerson = async (personObj) => {
   const response = await axios.post(PERSONS_API, personObj)
