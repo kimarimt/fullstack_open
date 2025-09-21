@@ -1,6 +1,5 @@
 import express from 'express'
 import morgan from 'morgan'
-import cors from 'cors'
 
 let persons = [
   {
@@ -28,10 +27,10 @@ let persons = [
 const app = express()
 const baseUrl = '/api/persons'
 const baseUrlId = `${baseUrl}/:id`
-const port = 3001
+const port = process.env.PORT || 3001
 
 app.use(express.json())
-app.use(cors())
+app.use(express.static('dist'))
 
 morgan.token('body', (req, res) => {
   if (req.method === 'POST') {
