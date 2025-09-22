@@ -71,9 +71,8 @@ app.get(baseUrlId, (req, res) => {
   res.json(person)
 })
 
-app.delete(baseUrlId, (req, res) => {
-  const id = req.params.id
-  const person = persons.find(person => person.id === id)
+app.delete(baseUrlId, async (req, res) => {
+  const person = await Person.findById(req.params.id)
 
   if (!person) {
     return res.status(404).json({
@@ -81,7 +80,7 @@ app.delete(baseUrlId, (req, res) => {
     })
   }
 
-  persons = persons.filter(person => person.id !== id)
+  await Person.deleteOne({ _id: person._id })
   res.status(204).end()
 })
 
