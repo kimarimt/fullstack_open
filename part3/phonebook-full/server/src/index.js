@@ -33,7 +33,7 @@ app.get('/info', (req, res) => {
   res.send(`Phonebook has info for ${persons.length} people\n${current}`)
 })
 
-app.post(baseUrl, (req, res) => {
+app.post(baseUrl, async (req, res) => {
   const { name, number } = req.body
 
   if (!name) {
@@ -47,22 +47,10 @@ app.post(baseUrl, (req, res) => {
       error: 'number is required'
     })    
   }
-
-  const person = persons.find(person => person.name === name)
-  if (person) {
-    return res.status(400).send({
-      error: 'name must be unique'
-    })   
-  }
   
-  const newPerson = {
-    id: String(Math.floor(Math.random() * (10000 - 100)) + 100),
-    name,
-    number
-  }
-
-  persons = persons.concat(newPerson)
-  res.status(201).json(newPerson)
+  const newPerson = new Person({ name, number })
+  const savedPerson = await newPerson.save()
+  res.status(201).json(savedPerson)
 })
 
 app.get(baseUrl, async (req, res) => {
