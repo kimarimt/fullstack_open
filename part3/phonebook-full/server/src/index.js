@@ -1,33 +1,21 @@
 import express from 'express'
+import mongoose from 'mongoose'
 import morgan from 'morgan'
-
-let persons = [
-  {
-    id: '1',
-    name: 'Arto Hellas',
-    number: '1-248-344-1933'
-  },
-  {
-    id: '2',
-    name: 'Ada Lovelace',
-    number: '1-555-834-4065'
-  },
-  {
-    id: '3',
-    name: 'Dan Abramov',
-    number: '1-555-744-9406'
-  },
-  { 
-    id: '4',
-    name: 'Mary Poppendieck', 
-    number: '1-248-444-5999'
-  }
-]
+import Person from './models/person.js'
 
 const app = express()
 const baseUrl = '/api/persons'
 const baseUrlId = `${baseUrl}/:id`
 const port = process.env.PORT || 3001
+
+mongoose.set('strictQuery', false)
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('MongoDB connection successful')
+  })
+  .catch(err => {
+    console.log(`error connecting to MongoDB: `, err)
+  })
 
 app.use(express.json())
 app.use(express.static('dist'))
@@ -77,7 +65,8 @@ app.post(baseUrl, (req, res) => {
   res.status(201).json(newPerson)
 })
 
-app.get(baseUrl, (req, res) => {
+app.get(baseUrl, async (req, res) => {
+  const persons = await Person.find({})
   res.json(persons)
 })
 
