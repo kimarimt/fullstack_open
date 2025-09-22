@@ -2,6 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import morgan from 'morgan'
 import Person from './models/person.js'
+import middleware from './util/middleware.js'
 
 const app = express()
 const baseUrl = '/api/persons'
@@ -71,18 +72,22 @@ app.get(baseUrlId, (req, res) => {
   res.json(person)
 })
 
-app.delete(baseUrlId, async (req, res) => {
-  const person = await Person.findById(req.params.id)
+app.delete(baseUrlId, async (req, res, next) => {
+  try {
+    const person = await Person.findByIdAndDelete(req.params.id)
 
-  if (!person) {
-    return res.status(404).json({
-      error: 'person not found'
-    })
+    if (!person) {
+      throw new TypeError('person not found')
+    }
+
+    return res.status(204).end()
+  } catch (err) {
+    next(err)
   }
-
-  await Person.deleteOne({ _id: person._id })
-  res.status(204).end()
 })
+
+app.use(middleware.errorHandler)
+app.use(middleware.unknownEndpoint)
 
 app.listen(port, () => {
   console.log(`[server] running on port ${port}`)
