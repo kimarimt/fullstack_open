@@ -72,12 +72,27 @@ app.get(baseUrlId, (req, res) => {
   res.json(person)
 })
 
+app.put(baseUrlId, async (req, res, next) => {
+  try {
+    const { name, number } = req.body;
+    const person = await Person.findByIdAndUpdate(req.params.id, { name, number }, { new: true })
+
+    if (!person) {
+      return res.status(404).send({ error: 'person not found' })
+    }
+
+    res.json(person)
+  } catch (err) {
+    next(err)
+  }
+})
+
 app.delete(baseUrlId, async (req, res, next) => {
   try {
     const person = await Person.findByIdAndDelete(req.params.id)
 
     if (!person) {
-      throw new TypeError('person not found')
+      return res.status(404).send({ error: 'person not found' })
     }
 
     return res.status(204).end()
