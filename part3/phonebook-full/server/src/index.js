@@ -29,9 +29,10 @@ morgan.token('body', (req, res) => {
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
-app.get('/info', (req, res) => {
+app.get('/info', async (req, res) => {
+  const persons = await Person.countDocuments()
   const current = new Date().toString()
-  res.send(`Phonebook has info for ${persons.length} people\n${current}`)
+  res.send(`Phonebook has info for ${persons} people\n${current}`)
 })
 
 app.post(baseUrl, async (req, res) => {
@@ -59,17 +60,18 @@ app.get(baseUrl, async (req, res) => {
   res.json(persons)
 })
 
-app.get(baseUrlId, (req, res) => {
-  const id = req.params.id
-  const person = persons.find(person => person.id === id)
+app.get(baseUrlId, async (req, res, next) => {
+  try {
+    const person = await Person.findById(req.params.id)
 
-  if (!person) {
-    return res.status(404).json({
-      error: 'person not found'
-    })
+    if (!person) {
+      return res.status(404).send({ error: 'person not found' })
+    }
+
+    res.json(person)
+  } catch (error) {
+    next(error)
   }
-
-  res.json(person)
 })
 
 app.put(baseUrlId, async (req, res, next) => {
