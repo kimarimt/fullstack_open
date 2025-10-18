@@ -7,7 +7,18 @@ export default function App() {
 
   return (
     <div>
-      code here
+      <h1>Give Feedback</h1>
+      <div>
+        <button onClick={() => setGood(good + 1)}>good</button>
+        <button onClick={() => setNeutral(neutral + 1)}>neutral</button>
+        <button onClick={() => setBad(bad + 1)}>bad</button>
+      </div>
+      <h2>Statistics</h2>
+      <div>
+        good {good}<br />
+        neutral {neutral}<br />
+        bad {bad}<br />
+      </div>
     </div>
   )
 }
