@@ -1,3 +1,3 @@
-export default function Part({ part, exercise }) {
-  return <p>{part} {exercise}</p>
+export default function Part({ part }) {
+  return <p>{part.name} {part.exercises}</p>
 }
