@@ -1,3 +1,5 @@
+import StatLine from './StatLine';
+
 export default function Statistics({ good, neutral, bad }) {
   const totalVotes = good + neutral + bad
   const averageVotes = (good - bad) / totalVotes;
@@ -5,12 +7,12 @@ export default function Statistics({ good, neutral, bad }) {
 
   return (
     <div>
-      good {good}<br />
-      neutral {neutral}<br />
-      bad {bad}<br />
-      all {totalVotes}<br />
-      average {averageVotes.toFixed(2)}<br />
-      positive {positiveVotes.toFixed(2)}%
+      <StatLine text='good' value={good} />
+      <StatLine text='neutral' value={neutral} />
+      <StatLine text='bad' value={bad} />
+      <StatLine text='all' value={totalVotes} />
+      <StatLine text='average' value={averageVotes.toFixed(2)} />
+      <StatLine text='positive' value={positiveVotes.toFixed(2)} />
     </div>
   )
 }
