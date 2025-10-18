@@ -5,6 +5,10 @@ export default function App() {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
+  const totalVotes = good + neutral + bad
+  const averageVotes = (good - bad) / totalVotes;
+  const positiveVotes = good / totalVotes * 100;
+
   return (
     <div>
       <h1>Give Feedback</h1>
@@ -18,6 +22,9 @@ export default function App() {
         good {good}<br />
         neutral {neutral}<br />
         bad {bad}<br />
+        all {totalVotes}<br />
+        average {averageVotes.toFixed(2)}<br />
+        positive {positiveVotes.toFixed(2)}%
       </div>
     </div>
   )
