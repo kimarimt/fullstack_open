@@ -14,9 +14,15 @@ export default function App() {
 
   const [selected, setSelected] = useState(0)
 
+  function handleSelected() {
+    const randomNumber = Math.floor(Math.random() * anecdotes.length)
+    setSelected(randomNumber)
+  }
+
   return (
     <div>
-      {anecdotes[selected]}
+      <p>{anecdotes[selected]}</p>
+      <button onClick={handleSelected}>next anecdote</button>
     </div>
   )
 }
