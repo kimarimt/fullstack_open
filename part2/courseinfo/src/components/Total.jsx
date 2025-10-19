@@ -1,5 +1,9 @@
 export default function Total({ parts }) {
-  const total = parts[0].exercises + parts[1].exercises + parts[2].exercises
+  const total = parts.reduce((prev, curr) => prev + curr.exercises, 0)
   
-  return <p>Number of exercises {total}</p>
+  return (
+    <p>
+      <strong>total of {total} exercises</strong>
+    </p>
+  )
 }
