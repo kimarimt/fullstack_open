@@ -1,8 +1,8 @@
 export default function StatLine({ text, value }) {
   return (
-    <>
-      <span>{text} {value}</span>
-      <br />
-    </>
+    <tr>
+      <td>{text}</td>
+      <td>{value}{text === 'positive' ? '%' : ''}</td>
+    </tr>
   )
 }
