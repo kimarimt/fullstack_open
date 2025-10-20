@@ -2,10 +2,17 @@ import { useState } from 'react'
 
 export default function App() {
   const [contacts, setContacts] = useState([
-    { name: 'Arto Hellas', phoneNumber: '1-978-754-6980' }
+    { name: 'Arto Hellas', phoneNumber: '1-978-754-6980' },
+    { name: 'Ada Lovelace', phoneNumber: '1-256-733-2241' },
+    { name: 'Dan Abramov', phoneNumber: '1-564-869-6404' },
+    { name: 'Mary Poppendieck', phoneNumber: '1-305-277-6659' }
   ])
+  
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [search, setSearch] = useState('')
+
+  const matches = contacts.filter(contact => contact.name.includes(search))
 
   function addContact(event) {
     event.preventDefault()
@@ -23,6 +30,16 @@ export default function App() {
   return (
     <div>
       <h1>Phonebook</h1>
+      <div>
+        <label htmlFor='search'>Search Contacts: </label>
+        <input 
+          id='search'
+          type='text' 
+          value={search}
+          onChange={({ target }) => setSearch(target.value)}
+        />
+      </div>
+      <h2>New Contact</h2>
       <form onSubmit={addContact}>
         <div>
           <label htmlFor='name'>Name: </label>
@@ -47,7 +64,7 @@ export default function App() {
         </div>
       </form>
       <h2>Contacts</h2>
-      {contacts.map(contact => 
+      {matches.map(contact => 
         <p key={contact.name}>{contact.name} {contact.phoneNumber}</p>
       )}
     </div>
