@@ -1,14 +1,20 @@
 import { useState } from 'react'
 
 export default function App() {
-  const [contacts, setContects] = useState([
+  const [contacts, setContacts] = useState([
     { name: 'Arto Hellas' }
   ])
   const [newName, setNewName] = useState('')
 
   function addContact(event) {
     event.preventDefault()
-    setContects(contacts.concat({ name: newName }))
+
+    if (contacts.find(contact => contact.name === newName)) {
+      alert(`${newName} is already in your contacts`)
+      return
+    }
+
+    setContacts(contacts.concat({ name: newName }))
     setNewName('')
   }
 
