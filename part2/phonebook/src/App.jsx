@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Filter from './components/Filter'
+import NewContactForm from './components/NewContactForm'
+import Contacts from './components/Contacts'
 
 export default function App() {
   const [contacts, setContacts] = useState([
@@ -8,65 +11,30 @@ export default function App() {
     { name: 'Mary Poppendieck', phoneNumber: '1-305-277-6659' }
   ])
   
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
-
   const matches = contacts.filter(contact => contact.name.includes(search))
 
-  function addContact(event) {
-    event.preventDefault()
-
-    if (contacts.find(contact => contact.name === newName)) {
-      alert(`${newName} is already in your contacts`)
-      return
+  function addContact({ name, phoneNumber }) {
+    if (contacts.find(contact => contact.name === name)) {
+      alert(`${name} is already in your contacts`)
+      return false
     }
 
-    setContacts(contacts.concat({ name: newName, phoneNumber: newNumber }))
-    setNewName('')
-    setNewNumber('')
+    setContacts(contacts.concat({ name, phoneNumber }))
+    return true
   }
 
   return (
     <div>
       <h1>Phonebook</h1>
-      <div>
-        <label htmlFor='search'>Search Contacts: </label>
-        <input 
-          id='search'
-          type='text' 
-          value={search}
-          onChange={({ target }) => setSearch(target.value)}
-        />
-      </div>
+      <Filter 
+        search={search} 
+        onChange={({ target }) => setSearch(target.value)} 
+      />
       <h2>New Contact</h2>
-      <form onSubmit={addContact}>
-        <div>
-          <label htmlFor='name'>Name: </label>
-          <input 
-            id='name' 
-            type='text'
-            value={newName}
-            onChange={({ target }) => setNewName(target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor='phoneNumber'>Phone Number: </label>
-          <input 
-            id='phoneNumber'
-            type='text' 
-            value={newNumber}
-            onChange={({ target }) => setNewNumber(target.value)}
-          />
-        </div>
-        <div>
-          <button type='submit'>add</button>
-        </div>
-      </form>
+      <NewContactForm onSubmit={addContact} />
       <h2>Contacts</h2>
-      {matches.map(contact => 
-        <p key={contact.name}>{contact.name} {contact.phoneNumber}</p>
-      )}
+      <Contacts contacts={matches} />
     </div>
   )
 }
