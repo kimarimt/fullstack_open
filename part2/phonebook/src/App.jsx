@@ -38,6 +38,11 @@ export default function App() {
     return true
   }
 
+  async function deleteContact(contactId) {
+    await contactService.deleteContact(contactId)
+    setContacts(contacts.filter(contact => contact.id !== contactId))
+  }
+
   return ( 
     <>
       {matches && (
@@ -50,7 +55,7 @@ export default function App() {
           <h2>New Contact</h2>
           <NewContactForm onSubmit={addContact} />
           <h2>Contacts</h2>
-          <Contacts contacts={matches} />
+          <Contacts contacts={matches} onClick={deleteContact} />
         </div>
       )}
     </>

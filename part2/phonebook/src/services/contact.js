@@ -12,7 +12,12 @@ async function getAll() {
   return response.data
 }
 
+async function deleteContact(contactId) {
+  await axios.delete(`${baseUrl}/${contactId}`)
+}
+
 export default {
   save,
-  getAll
+  getAll,
+  deleteContact
 }
