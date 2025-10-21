@@ -21,13 +21,20 @@ export default function App() {
     fetchContacts()
   }, [])
 
-  function addContact({ name, phoneNumber }) {
+  async function addContact({ name, phoneNumber }) {
     if (contacts.find(contact => contact.name === name)) {
       alert(`${name} is already in your contacts`)
       return false
     }
 
-    setContacts(contacts.concat({ name, phoneNumber }))
+    const newContact = {
+      id: String(contacts.length + 1),
+      name,
+      phoneNumber
+    }
+    
+    const savedContact = await contactService.save(newContact)
+    setContacts(contacts.concat(savedContact))
     return true
   }
 
