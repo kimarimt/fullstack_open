@@ -6,13 +6,9 @@ export default function NewContactForm({ onSubmit }) {
 
   function handleSubmit(event) {
     event.preventDefault()
-
-    const isSaved = onSubmit({ name, phoneNumber })
-
-    if (isSaved) {
-      setName('')
-      setPhoneNumber('')
-    }
+    onSubmit({ name, phoneNumber })
+    setName('')
+    setPhoneNumber('')
   }
 
   return (

@@ -22,23 +22,39 @@ export default function App() {
   }, [])
 
   async function addContact({ name, phoneNumber }) {
-    if (contacts.find(contact => contact.name === name)) {
-      alert(`${name} is already in your contacts`)
-      return false
+    const existingContact = contacts.find(contact => contact.name === name)
+
+    if (existingContact) {
+      editContact(existingContact, phoneNumber)
+      return
     }
 
     const newContact = {
-      id: String(contacts.length + 1),
+      id: String(Math.floor(Math.random() * 1000)),
       name,
       phoneNumber
     }
     
     const savedContact = await contactService.save(newContact)
     setContacts(contacts.concat(savedContact))
-    return true
+  }
+
+  async function editContact(existingContact, newNumber) {
+    if (confirm(`${existingContact.name} is already in your contacts. Would you like to replace the old phone number?`)) {
+      const newContact = {
+        ...existingContact,
+        phoneNumber: newNumber
+      }
+
+      const updatedContact = await contactService.editContact(existingContact.id, newContact)
+      setContacts(contacts.map(contact => contact.id === updatedContact.id ? updatedContact : contact))
+    }
   }
 
   async function deleteContact(contactId) {
+    const existingContact = contacts.find(contact => contact.id === contactId)
+
+    if (confirm(`Delete ${existingContact.name}`))
     await contactService.deleteContact(contactId)
     setContacts(contacts.filter(contact => contact.id !== contactId))
   }

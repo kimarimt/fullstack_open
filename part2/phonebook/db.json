@@ -1,11 +1,6 @@
 {
   "contacts": [
     {
-      "id": "1",
-      "name": "Arto Hellas",
-      "phoneNumber": "870-461-4096"
-    },
-    {
       "id": "2",
       "name": "Ada Lovelace",
       "phoneNumber": "472-252-7200"
@@ -19,6 +14,11 @@
       "id": "4",
       "name": "Mary Poppendieck",
       "phoneNumber": "505-676-1598"
+    },
+    {
+      "id": "942",
+      "name": "Arto Hellas",
+      "phoneNumber": "805-404-3214"
     }
   ]
 }

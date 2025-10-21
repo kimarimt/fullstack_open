@@ -12,6 +12,11 @@ async function getAll() {
   return response.data
 }
 
+async function editContact(contactId, newContact) {
+  const response = await axios.put(`${baseUrl}/${contactId}`, newContact)
+  return response.data
+}
+
 async function deleteContact(contactId) {
   await axios.delete(`${baseUrl}/${contactId}`)
 }
@@ -19,5 +24,6 @@ async function deleteContact(contactId) {
 export default {
   save,
   getAll,
+  editContact,
   deleteContact
 }
