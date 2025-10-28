@@ -3,10 +3,13 @@ import contactService from './services/contact'
 import Filter from './components/Filter'
 import NewContactForm from './components/NewContactForm'
 import Contacts from './components/Contacts'
+import Notification from './components/Notification'
 
 export default function App() {
   const [contacts, setContacts] = useState(null)
   const [search, setSearch] = useState('')
+  const [message, setMessage] = useState(null)
+  const [color, setColor] = useState(null)
   
   const matches = contacts 
     ? contacts.filter(contact => contact.name.includes(search))
@@ -37,6 +40,7 @@ export default function App() {
     
     const savedContact = await contactService.save(newContact)
     setContacts(contacts.concat(savedContact))
+    toggleNotification(`Added ${savedContact.name}`)
   }
 
   async function editContact(existingContact, newNumber) {
@@ -48,6 +52,7 @@ export default function App() {
 
       const updatedContact = await contactService.editContact(existingContact.id, newContact)
       setContacts(contacts.map(contact => contact.id === updatedContact.id ? updatedContact : contact))
+      toggleNotification(`${updatedContact.name}'s number updated`)
     }
   }
 
@@ -59,11 +64,22 @@ export default function App() {
     setContacts(contacts.filter(contact => contact.id !== contactId))
   }
 
+  function toggleNotification(message, color='green') {
+    setMessage(message)
+    setColor(color)
+
+    setTimeout(function () {
+      setMessage(null)
+      setColor(null)
+    }, 3000)
+  }
+
   return ( 
     <>
       {matches && (
         <div>
           <h1>Phonebook</h1>
+          {message && color && <Notification message={message} color={color} />}
           <Filter 
             search={search} 
             onChange={({ target }) => setSearch(target.value)} 
