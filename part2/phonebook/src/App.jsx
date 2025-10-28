@@ -59,9 +59,15 @@ export default function App() {
   async function deleteContact(contactId) {
     const existingContact = contacts.find(contact => contact.id === contactId)
 
-    if (confirm(`Delete ${existingContact.name}`))
-    await contactService.deleteContact(contactId)
-    setContacts(contacts.filter(contact => contact.id !== contactId))
+    if (confirm(`Delete ${existingContact.name}`)) {
+      try {
+        await contactService.deleteContact(contactId)
+        setContacts(contacts.filter(contact => contact.id !== contactId))
+      } catch (e) {
+        const message = e.response.data
+        toggleNotification(`${existingContact.name} ${message}`, 'red')
+      }
+    }
   }
 
   function toggleNotification(message, color='green') {
