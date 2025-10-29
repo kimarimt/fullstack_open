@@ -1,4 +1,5 @@
 import express from 'express'
+import { generateId } from './util/helpers.js'
 
 let contacts = [
   {
@@ -25,8 +26,23 @@ let contacts = [
 
 const app = express()
 
+app.use(express.json())
+
 app.get('/info', function (req, res) {
   res.send(`Phonebook has ${contacts.length} contacts\n${new Date()}`)
+})
+
+app.post('/api/contacts', function (req, res) {
+  const { name, phoneNumber } = req.body
+
+  const newContact = {
+    id: String(generateId(contacts.length, 10000)),
+    name,
+    phoneNumber
+  }
+
+  contacts = contacts.concat(newContact)
+  res.status(201).json(newContact)
 })
 
 app.get('/api/contacts', function (req, res) {
