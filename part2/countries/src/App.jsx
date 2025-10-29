@@ -5,6 +5,7 @@ import countryService from './services/country'
 export default function App() {
   const [search, setSearch] = useState('')
   const [countries, setCountries] = useState(null)
+  const [selected, setSelected] = useState(null)
 
   const searchResults = countries 
     ? countries.filter(country => country.name.common.toLowerCase().includes(search.toLowerCase()))
@@ -33,10 +34,23 @@ export default function App() {
             />
           </div>
           <div>
-            {searchResults.length === 1 && <CountryDetails country={searchResults[0]} />}
-            {searchResults.length > 10 && <p>Too many results, specify another filter</p>}
-            {searchResults.length <= 10 && searchResults.length > 1 && (
-              searchResults.map(result => <p key={result.cca2}>{result.name.common}</p>)
+            {selected && (
+              <>
+                <CountryDetails country={selected} />
+                <button onClick={() => setSelected(null)}>Back</button>
+              </>
+            )}
+            {!selected && (
+              <>
+                {searchResults.length === 1 && <CountryDetails country={searchResults[0]} />}
+                {searchResults.length > 10 && <p>Too many results, specify another filter</p>}
+                {searchResults.length <= 10 && searchResults.length > 1 && (searchResults.map(result => (
+                  <p key={result.cca2}>
+                    <span>{result.name.common}</span>{' '}
+                    <button onClick={() => setSelected(result)}>show</button>
+                  </p>
+                )))}
+              </>
             )}
           </div>
         </div>
