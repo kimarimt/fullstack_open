@@ -35,6 +35,19 @@ app.get('/info', function (req, res) {
 app.post('/api/contacts', function (req, res) {
   const { name, phoneNumber } = req.body
 
+  if (!name) {
+    return res.status(400).send({ error: 'name is required' })
+  }
+
+  if (!phoneNumber) {
+    return res.status(400).send({ error: 'phoneNumber is required' })
+  }
+
+  const contact = contacts.find(c => c.name === name)
+  if (contact) {
+    return res.status(400).send({ error: 'name must be unique' })
+  }
+
   const newContact = {
     id: String(generateId(contacts.length, 10000)),
     name,
@@ -54,7 +67,7 @@ app.get('/api/contacts/:id', function (req, res) {
   const contact = contacts.find(c => c.id === id) 
 
   if (!contact) {
-    return res.status(404).send(`Contact with id '${id}' not found`)
+    return res.status(404).send({ error: `Contact with id '${id}' not found` })
   }
 
   return res.json(contact)
