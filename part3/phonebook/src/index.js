@@ -25,10 +25,13 @@ let contacts = [
   }
 ]
 
-const app = express()
+morgan.token('body', function (req, res) {
+  return req.method === 'POST' ? JSON.stringify(req.body) : ''
+})
 
+const app = express()
 app.use(express.json())
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.get('/info', function (req, res) {
   res.send(`Phonebook has ${contacts.length} contacts\n${new Date()}`)
