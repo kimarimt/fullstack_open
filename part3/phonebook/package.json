@@ -1,0 +1,16 @@
+{
+  "name": "phonebook",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Phonebook Backend project for Fullstack Open ",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "author": "Alec German <kimarimt@protonmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
