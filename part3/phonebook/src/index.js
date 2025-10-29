@@ -1,6 +1,6 @@
 import express from 'express'
 
-const contacts = [
+let contacts = [
   {
     id: '1',
     name: 'Ada Lovelace',
@@ -42,6 +42,12 @@ app.get('/api/contacts/:id', function (req, res) {
   }
 
   return res.json(contact)
+})
+
+app.delete('/api/contacts/:id', function (req, res) {
+  const id = req.params.id
+  contacts = contacts.filter(c => c.id !== id)
+  res.status(204).end()
 })
 
 const PORT = 3001
