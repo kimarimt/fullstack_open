@@ -1,3 +1,5 @@
+import WeatherDetails from "./WeatherDetails";
+
 export default function CountryDetails({ country }) {
 
   return (
@@ -10,6 +12,7 @@ export default function CountryDetails({ country }) {
         {Object.values(country.languages).map(language => <li key={language}>{language}</li>)}
       </ul>
       <img src={country.flags.png} alt={country.flags.alt} />
+      <WeatherDetails capital={country.capital[0]} />
     </div>
   )
 }
