@@ -33,6 +33,17 @@ app.get('/api/contacts', function (req, res) {
   res.json(contacts)
 })
 
+app.get('/api/contacts/:id', function (req, res) {
+  const id = req.params.id
+  const contact = contacts.find(c => c.id === id) 
+
+  if (!contact) {
+    return res.status(404).send(`Contact with id '${id}' not found`)
+  }
+
+  return res.json(contact)
+})
+
 const PORT = 3001
 app.listen(PORT, function () {
   console.log(`⚡[server] Listening at http://localhost:${PORT}`)
