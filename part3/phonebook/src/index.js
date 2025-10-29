@@ -1,4 +1,5 @@
 import express from 'express'
+import morgan from 'morgan'
 import { generateId } from './util/helpers.js'
 
 let contacts = [
@@ -27,6 +28,7 @@ let contacts = [
 const app = express()
 
 app.use(express.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 app.get('/info', function (req, res) {
   res.send(`Phonebook has ${contacts.length} contacts\n${new Date()}`)
