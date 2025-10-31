@@ -5,12 +5,13 @@
   "description": "Phonebook Backend project for Fullstack Open ",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "start": "dotenvx run -- node src/index.js",
+    "dev": "dotenvx run -- node --watch src/index.js"
   },
   "author": "Alec German <kimarimt@protonmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.51.0",
     "express": "^5.1.0",
     "mongoose": "^8.19.2",
     "morgan": "^1.10.1"
