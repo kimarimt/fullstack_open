@@ -1,6 +1,5 @@
 import express from 'express'
 import morgan from 'morgan'
-import cors from 'cors'
 import { generateId } from './util/helpers.js'
 
 let contacts = [
@@ -32,8 +31,8 @@ morgan.token('body', function (req, res) {
 
 const app = express()
 
-app.use(cors())
 app.use(express.json())
+app.use(express.static('dist'))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.get('/info', function (req, res) {

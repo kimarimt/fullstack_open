@@ -4,7 +4,13 @@
   "description": "Fullstack Phonebook project for MOOC course",
   "main": "src/index.js",
   "scripts": {
-    "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\""
+    "build:ui": "rm -rf dist && cd client && npm run build && cp -r dist ../server",
+    "deploy": "cd server && fly deploy",
+    "deploy:full": "npm run build:ui && npm run deploy",
+    "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\"",
+    "logs": "cd server && fly logs",
+    "start": "cd server && node src/index.js"
+
   },
   "author": "Alec German <kimarimt@protonmail.com>",
   "license": "MIT",

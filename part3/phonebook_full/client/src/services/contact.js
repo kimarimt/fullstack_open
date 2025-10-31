@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3001/api/contacts'
+const baseUrl = '/api/contacts'
 
 async function save(newContact) {
   const response = await axios.post(baseUrl, newContact)
