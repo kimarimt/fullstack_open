@@ -1,5 +1,6 @@
 import express from 'express'
 import morgan from 'morgan'
+import cors from 'cors'
 import { generateId } from './util/helpers.js'
 
 let contacts = [
@@ -30,6 +31,8 @@ morgan.token('body', function (req, res) {
 })
 
 const app = express()
+
+app.use(cors())
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
@@ -84,7 +87,7 @@ app.delete('/api/contacts/:id', function (req, res) {
   res.status(204).end()
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, function () {
   console.log(`⚡[server] Listening at http://localhost:${PORT}`)
 })
