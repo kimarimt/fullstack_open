@@ -26,30 +26,25 @@ export let contacts = [
 
 const router = express.Router()
 
-router.post('/', function (req, res) {
+router.post('/', async function (req, res) {
   const { name, phoneNumber } = req.body
 
-  if (!name) {
-    return res.status(400).send({ error: 'name is required' })
+  if (!name || !phoneNumber) {
+    return res.status(400).json({ error: 'name and phoneNumber fields are required' })
   }
 
-  if (!phoneNumber) {
-    return res.status(400).send({ error: 'phoneNumber is required' })
+  const existingContact = await Contact.findOne({ name })
+  if (existingContact) {
+    return res.status(400).json({ error: 'name must be unique' })
   }
 
-  const contact = contacts.find(c => c.name === name)
-  if (contact) {
-    return res.status(400).send({ error: 'name must be unique' })
-  }
-
-  const newContact = {
-    id: String(generateId(contacts.length, 10000)),
+  const contact = new Contact({
     name,
     phoneNumber
-  }
+  })
 
-  contacts = contacts.concat(newContact)
-  res.status(201).json(newContact)
+  const savedContact = await contact.save()
+  res.json(savedContact)
 })
 
 router.get('/', async function (req, res) {
