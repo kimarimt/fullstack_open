@@ -19,7 +19,7 @@ const App = () => {
     exercises: 14
   }
   
-  const totalExercises = part1.exercises + part2.exercises + part3.exercises3
+  const totalExercises = part1.exercises + part2.exercises + part3.exercises
 
   return (
     <div> 
