@@ -1,4 +1,4 @@
 const Header = ({ course }) => 
-  <h1>{course}</h1>
+  <h2>{course}</h2>
 
 export default Header
