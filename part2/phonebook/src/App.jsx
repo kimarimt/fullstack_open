@@ -2,9 +2,11 @@ import { useState, Fragment } from 'react'
 
 const App = () => {
   const [contacts, setContacts] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', number: '720-226-3698' }
   ])
+  
   const [name, setName] = useState('')
+  const [number, setNumber] = useState('')
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -17,11 +19,13 @@ const App = () => {
     }
     
     const newContact = { 
-      name
+      name,
+      number
     }
 
     setContacts(contacts.concat(newContact))
     setName('')
+    setNumber('')
   }
 
   return (
@@ -29,12 +33,21 @@ const App = () => {
       <h1>Phonebook</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor='name'>name: </label>
+          <label htmlFor='name'>Name: </label>
           <input 
             id='name' 
             type='text' 
             value={name}
             onChange={({ target }) => setName(target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor='number'>Phone Number: </label>
+          <input 
+            id='number' 
+            type='text' 
+            value={number}
+            onChange={({ target }) => setNumber(target.value)}
           />
         </div>
         <div>
@@ -45,7 +58,7 @@ const App = () => {
       <div>
         {contacts.map(contact => (
           <Fragment key={contact.name}>
-            <span>{contact.name}</span>
+            <span>{contact.name} {contact.number}</span>
             <br />
           </Fragment>
         ))}
