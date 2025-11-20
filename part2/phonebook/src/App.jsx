@@ -2,11 +2,18 @@ import { useState, Fragment } from 'react'
 
 const App = () => {
   const [contacts, setContacts] = useState([
-    { name: 'Arto Hellas', number: '720-226-3698' }
+    { name: 'Arto Hellas', number: '720-226-3698' },
+    { name: 'Ada Lovelace', number: '276-522-8909' },
+    { name: 'Dan Abramov', number: '305-250-5118' },
+    { name: 'Mary Poppendieck', number: '305-689-5555' }
   ])
   
   const [name, setName] = useState('')
   const [number, setNumber] = useState('')
+  const [search, setSearch] = useState('')
+
+  const searchResults = contacts
+    .filter(contact => contact.name.includes(search))
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -31,6 +38,16 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <div>
+        <label htmlFor='search'>Search contacts</label>
+        <input 
+          id='search'
+          type='text' 
+          value={search}
+          onChange={({ target }) => setSearch(target.value)}
+        />
+      </div>
+      <h2>Add a new Contact</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor='name'>Name: </label>
@@ -56,7 +73,7 @@ const App = () => {
       </form>
       <h2>Contacts</h2>
       <div>
-        {contacts.map(contact => (
+        {searchResults.map(contact => (
           <Fragment key={contact.name}>
             <span>{contact.name} {contact.number}</span>
             <br />
