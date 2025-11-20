@@ -1,8 +1,8 @@
 const StatisticLine = ({ text, value }) => (
-  <>
-    <span>{text} {value}</span>
-    <br />
-  </>
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
 )
 
 export default StatisticLine
