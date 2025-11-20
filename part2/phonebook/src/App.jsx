@@ -8,6 +8,13 @@ const App = () => {
 
   const handleSubmit = event => {
     event.preventDefault()
+
+    const contact = contacts.find(contact => contact.name === name)
+
+    if (contact) {
+      alert(`${contact.name} already exists in your contacts`)
+      return
+    }
     
     const newContact = { 
       name
