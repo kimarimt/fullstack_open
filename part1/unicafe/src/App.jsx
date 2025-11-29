@@ -5,10 +5,20 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
-
   return (
     <div>
-      code here
+      <h1>give feedback</h1>
+      <div>
+        <button onClick={() => setGood(good + 1)}>good</button>
+        <button onClick={() => setNeutral(neutral + 1)}>neutral</button>
+        <button onClick={() => setBad(bad + 1)}>bad</button>
+      </div>
+      <h2>Statistics</h2>
+      <span>
+        good {good}<br />
+        neutral {neutral}<br />
+        bad {bad}
+      </span>
     </div>
   )
 }
