@@ -1,8 +1,8 @@
 const StatLine = ({ text, value }) => (
-  <>
-    <span>{text} {value}{text === 'positive' ? '%' : ''}</span>
-    <br />
-  </>
+  <tr>
+    <td>{text}</td> 
+    <td>{value}{text === 'positive' ? '%' : ''}</td>
+  </tr>
 )
 
 export default StatLine
