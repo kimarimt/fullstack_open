@@ -1,5 +1,5 @@
-const Total = props => {
-  const totalExercises = props.exercises1 + props.exercises2 + props.exercises3
+const Total = ({ parts }) => {
+  const totalExercises = parts[0].exercises + parts[1].exercises + parts[2].exercises
 
   return <p>Number of exercises {totalExercises}</p>
 }
