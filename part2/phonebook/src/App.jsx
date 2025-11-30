@@ -4,10 +4,17 @@ const App = () => {
   const [contacts, setContacts] = useState([
     { name: 'Arto Hellas' }
   ])
+ 
   const [name, setName] = useState('')
 
   const handleSubmit = event => {
     event.preventDefault()
+
+    const existingContact = contacts.find(contact => contact.name === name)
+    if (existingContact) {
+      alert(`${existingContact.name} is already in your contacts`)
+      return
+    }
 
     const newContact = {
       name
