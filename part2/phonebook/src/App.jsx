@@ -2,11 +2,17 @@ import { useState } from 'react'
 
 const App = () => {
   const [contacts, setContacts] = useState([
-    { name: 'Arto Hellas', phoneNumber: '505-396-2710' }
+    { id: 1, name: 'Arto Hellas', phoneNumber: '505-396-2710' },
+    { id: 2, name: 'Ada Lovelace', phoneNumber: '505-644-4860' },
+    { id: 3, name: 'Dan Abramov', phoneNumber: '472-241-5581' },
+    { id: 4, name: 'Mary Poppendieck', phoneNumber: '774-898-7840' },
   ])
  
   const [name, setName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
+  const [search, setSearch] = useState('')
+
+  const searchResults = contacts.filter(contact => contact.name.includes(search))
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -30,6 +36,16 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <div>
+        <label htmlFor='search'>Search contacts: </label>
+        <input
+          id='search'
+          type='text'
+          value={search}
+          onChange={({ target }) => setSearch(target.value)}
+        />
+      </div>
+      <h2>New Contact</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor='name'>Name: </label>
@@ -54,8 +70,8 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {contacts.map(contact => 
-        <p key={contact.name}>{contact.name} {contact.phoneNumber}</p>
+      {searchResults.map(contact => 
+        <p key={contact.id}>{contact.name} {contact.phoneNumber}</p>
       )}
     </div>
   )
