@@ -33,7 +33,7 @@ const App = () => {
     }
 
     const newContact = {
-      id: generateId(contacts.length + 1, 6000),
+      id: String(generateId(contacts.length + 1, 6000)),
       name,
       phoneNumber
     }
@@ -41,6 +41,14 @@ const App = () => {
     const savedContact = await contactService.addContact(newContact)
     setContacts(contacts.concat(savedContact))
     return true
+  }
+
+  const deleteContact = async contact => {
+    if (window.confirm(`Delete ${contact.name}?`)) {
+      const deletedContact = await contactService.deleteContact(contact.id)
+      console.log(deletedContact)
+      setContacts(contacts.filter(c => c.id !== deletedContact.id))
+    }
   }
 
   return (
@@ -55,7 +63,10 @@ const App = () => {
           <h2>New Contact</h2>
           <ContactForm addContact={addContact} />
           <h2>Numbers</h2>
-          <Contacts contacts={searchResults} />
+          <Contacts 
+            contacts={searchResults} 
+            onDelete={deleteContact}
+          />
         </div>
       )}
     </>

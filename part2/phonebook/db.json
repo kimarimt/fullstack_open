@@ -1,34 +1,29 @@
 {
   "contacts": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Arto Hellas",
       "phoneNumber": "472-258-6434"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Ada Lovelace",
       "phoneNumber": "305-499-5578"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Dan Abramov",
       "phoneNumber": "505-651-8675"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Mary Poppendieck",
       "phoneNumber": "305-237-7932"
     },
     {
-      "id": 136,
+      "id": "4391",
       "name": "Ada Wong",
-      "phoneNumber": "651-653-7136"
-    },
-    {
-      "id": 4849,
-      "name": "James Sunderland",
-      "phoneNumber": "330-994-9473"
+      "phoneNumber": "505-616-0447"
     }
   ]
 }
