@@ -21,7 +21,11 @@ const App = () => {
     ? contacts.filter(contact => contact.name.includes(search))
     : []
 
-  const addContact = (name, phoneNumber) => {
+  const generateId = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min
+  }
+
+  const addContact = async (name, phoneNumber) => {
     const existingContact = contacts.find(contact => contact.name === name)
     if (existingContact) {
       alert(`${existingContact.name} is already in your contacts`)
@@ -29,12 +33,13 @@ const App = () => {
     }
 
     const newContact = {
-      id: contacts.length + 1,
+      id: generateId(contacts.length + 1, 6000),
       name,
       phoneNumber
     }
 
-    setContacts(contacts.concat(newContact))
+    const savedContact = await contactService.addContact(newContact)
+    setContacts(contacts.concat(savedContact))
     return true
   }
 

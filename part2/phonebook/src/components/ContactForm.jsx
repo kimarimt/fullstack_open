@@ -4,10 +4,10 @@ const ContactForm = ({ addContact }) => {
   const [name, setName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault()
 
-    const success = addContact(name, phoneNumber)
+    const success = await addContact(name, phoneNumber)
     if (success) {
       setName('')
       setPhoneNumber('')
