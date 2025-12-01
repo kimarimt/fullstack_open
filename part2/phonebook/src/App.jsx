@@ -1,18 +1,25 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import ContactForm from './components/ContactForm'
 import Contacts from './components/Contacts'
+import contactService from './services/contacts'
 
 const App = () => {
-  const [contacts, setContacts] = useState([
-    { id: 1, name: 'Arto Hellas', phoneNumber: '505-396-2710' },
-    { id: 2, name: 'Ada Lovelace', phoneNumber: '505-644-4860' },
-    { id: 3, name: 'Dan Abramov', phoneNumber: '472-241-5581' },
-    { id: 4, name: 'Mary Poppendieck', phoneNumber: '774-898-7840' },
-  ])
- 
+  const [contacts, setContacts] = useState(null)
   const [search, setSearch] = useState('')
-  const searchResults = contacts.filter(contact => contact.name.includes(search))
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      const contactsData = await contactService.getAll()
+      setContacts(contactsData)
+    }
+
+    fetchContacts()
+  }, [])
+  
+  const searchResults = contacts 
+    ? contacts.filter(contact => contact.name.includes(search))
+    : []
 
   const addContact = (name, phoneNumber) => {
     const existingContact = contacts.find(contact => contact.name === name)
@@ -32,17 +39,21 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h1>Phonebook</h1>
-      <Filter 
-        search={search}
-        onChange={({ target }) => setSearch(target.value)}
-      />
-      <h2>New Contact</h2>
-      <ContactForm addContact={addContact} />
-      <h2>Numbers</h2>
-      <Contacts contacts={searchResults} />
-    </div>
+    <>
+      {contacts && (
+        <div>
+          <h1>Phonebook</h1>
+          <Filter 
+            search={search}
+            onChange={({ target }) => setSearch(target.value)}
+          />
+          <h2>New Contact</h2>
+          <ContactForm addContact={addContact} />
+          <h2>Numbers</h2>
+          <Contacts contacts={searchResults} />
+        </div>
+      )}
+    </>
   )
 }
 
