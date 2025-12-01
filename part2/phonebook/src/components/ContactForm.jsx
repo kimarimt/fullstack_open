@@ -6,12 +6,9 @@ const ContactForm = ({ addContact }) => {
 
   const handleSubmit = async event => {
     event.preventDefault()
-
-    const success = await addContact(name, phoneNumber)
-    if (success) {
-      setName('')
-      setPhoneNumber('')
-    }
+    await addContact(name, phoneNumber)
+    setName('')
+    setPhoneNumber('')
   }
 
   return (

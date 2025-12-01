@@ -12,13 +12,18 @@ const getAll = async () => {
   return response.data
 }
 
-const deleteContact = async contactId => {
-  const response = await axios.delete(`${baseUrl}/${contactId}`)
+const editContact = async (contactId, newContact) => {
+  const response = await axios.put(`${baseUrl}/${contactId}`, newContact)
   return response.data
+}
+
+const deleteContact = async contactId => {
+  await axios.delete(`${baseUrl}/${contactId}`)
 }
 
 export default {
   addContact,
   getAll,
+  editContact,
   deleteContact
 }

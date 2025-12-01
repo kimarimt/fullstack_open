@@ -28,8 +28,8 @@ const App = () => {
   const addContact = async (name, phoneNumber) => {
     const existingContact = contacts.find(contact => contact.name === name)
     if (existingContact) {
-      alert(`${existingContact.name} is already in your contacts`)
-      return false
+      await editContact(existingContact, phoneNumber)
+      return
     }
 
     const newContact = {
@@ -40,14 +40,24 @@ const App = () => {
 
     const savedContact = await contactService.addContact(newContact)
     setContacts(contacts.concat(savedContact))
-    return true
+  }
+
+  const editContact = async (contact, phoneNumber) => {
+    if (window.confirm(`${contact.name} is already in your contacts, would like to replace the existing number with a new number?`)) {
+      const newContact = {
+        ...contact,
+        phoneNumber
+      }
+
+      const updatedContact = await contactService.editContact(contact.id, newContact)
+      setContacts(contacts.map(c => c.id === updatedContact.id ? updatedContact : c))
+    }
   }
 
   const deleteContact = async contact => {
     if (window.confirm(`Delete ${contact.name}?`)) {
-      const deletedContact = await contactService.deleteContact(contact.id)
-      console.log(deletedContact)
-      setContacts(contacts.filter(c => c.id !== deletedContact.id))
+      await contactService.deleteContact(contact.id)
+      setContacts(contacts.filter(c => c.id !== contact.id))
     }
   }
 
