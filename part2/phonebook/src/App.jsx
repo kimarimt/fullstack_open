@@ -2,11 +2,14 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import ContactForm from './components/ContactForm'
 import Contacts from './components/Contacts'
+import Notification from './components/Notification'
 import contactService from './services/contacts'
 
 const App = () => {
   const [contacts, setContacts] = useState(null)
   const [search, setSearch] = useState('')
+  const [message, setMessage] = useState(null)
+  const [color, setColor] = useState(null)
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -40,6 +43,7 @@ const App = () => {
 
     const savedContact = await contactService.addContact(newContact)
     setContacts(contacts.concat(savedContact))
+    toggleNotification(`Added ${savedContact.name}`)
   }
 
   const editContact = async (contact, phoneNumber) => {
@@ -51,6 +55,7 @@ const App = () => {
 
       const updatedContact = await contactService.editContact(contact.id, newContact)
       setContacts(contacts.map(c => c.id === updatedContact.id ? updatedContact : c))
+      toggleNotification(`Updated number for ${updatedContact.name}`)
     }
   }
 
@@ -61,11 +66,24 @@ const App = () => {
     }
   }
 
+  const toggleNotification = (message, color='green') => {
+    setMessage(message)
+    setColor(color)
+
+    setTimeout(() => {
+      setMessage(null)
+      setColor(null)
+    }, 3000)
+  }
+
   return (
     <>
       {contacts && (
         <div>
           <h1>Phonebook</h1>
+          {message && color && 
+            <Notification message={message} color={color} />
+          }
           <Filter 
             search={search}
             onChange={({ target }) => setSearch(target.value)}
