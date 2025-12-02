@@ -59,10 +59,17 @@ const App = () => {
     }
   }
 
-  const deleteContact = async contact => {
+  const deleteContact = contact => {
     if (window.confirm(`Delete ${contact.name}?`)) {
-      await contactService.deleteContact(contact.id)
-      setContacts(contacts.filter(c => c.id !== contact.id))
+      contactService
+        .deleteContact(contact.id)
+        .then(() => {
+          setContacts(contacts.filter(c => c.id !== contact.id))
+        })
+        .catch(err => {
+          console.log(err)
+          toggleNotification(`${contact.name} has already been removed from your contacts.`, 'red')
+        })
     }
   }
 
