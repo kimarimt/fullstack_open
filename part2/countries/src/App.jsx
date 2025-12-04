@@ -5,6 +5,7 @@ import countryService from './services/country'
 const App = () => {
   const [countries, setCountres] = useState(null)
   const [search, setSearch] = useState('')
+  const [selected, setSelected] = useState(null)
 
   const searchResults = countries
     ? countries.filter(country => country.name.common.includes(search))
@@ -33,13 +34,27 @@ const App = () => {
             />
           </div>
           <div>
-            {searchResults.length > 10 && 
-              <p>Too many matches, specify another filter</p> 
-            }
-            {searchResults.length > 1 && searchResults.length <= 10 && (searchResults.map(country => 
-              <p key={country.cca2}>{country.name.common}</p>
-            ))}
-            {searchResults.length === 1 && <CountryDetails country={searchResults[0]} />}
+            {selected && (
+              <>
+                <CountryDetails country={selected} />
+                <br />
+                <button onClick={() => setSelected(null)}>Back</button>
+              </>
+            )}
+            {!selected && (
+              <>
+                {searchResults.length > 10 && 
+                  <p>Too many matches, specify another filter</p> 
+                }
+                {searchResults.length > 1 && searchResults.length <= 10 && (searchResults.map(country => 
+                  <p key={country.cca2}>
+                    {country.name.common}{' '}
+                    <button onClick={() => setSelected(country)}>Show</button>
+                  </p>
+                ))}
+                {searchResults.length === 1 && <CountryDetails country={searchResults[0]} />}
+              </>
+            )}
           </div>
         </div>
       )}
