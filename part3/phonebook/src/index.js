@@ -25,6 +25,10 @@ let contacts = [
 
 const app = express()
 
+app.get('/info', (req, res) => {
+  res.send(`<p>Phonebook has info for ${contacts.length} contacts</p><p>${new Date()}</p>`)
+})
+
 app.get('/api/contacts', (req, res) => {
   res.json(contacts)
 })
