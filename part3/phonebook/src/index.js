@@ -38,6 +38,14 @@ app.get('/info', (req, res) => {
 
 app.post(baseUrl, (req, res) => {
   const { name, phoneNumber } = req.body
+  if (!name || !phoneNumber) {
+    return res.status(400).json({ error: 'name and phone number are required' })
+  }
+
+  const contact = contacts.find(c => c.name === name)
+  if (contact) {
+    return res.status(400).json({ error: 'name must be unique' })
+  }
 
   const newContact = {
     id: String(generateId(contacts.length, 10000)),
