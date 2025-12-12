@@ -44,6 +44,18 @@ app.get('/api/contacts/:id', (req, res) => {
   res.json(contact)
 })
 
+app.delete('/api/contacts/:id', (req, res) => {
+  const id = req.params.id
+  const contact = contacts.find(c => c.id === id)
+
+  if (!contact) {
+    return res.status(404).end()
+  }
+
+  contacts = contacts.filter(c => c.id !== contact.id)
+  res.status(204).end()
+})
+
 const port = 3001
 app.listen(port, () => {
   console.log(`⚡[server]: running on port ${port}`)
