@@ -23,17 +23,37 @@ let contacts = [
   },
 ]
 
+const baseUrl = '/api/contacts'
 const app = express()
+
+const generateId = (min, max) => {
+  return Math.floor(Math.random() * (max - min)) + min
+}
+
+app.use(express.json())
 
 app.get('/info', (req, res) => {
   res.send(`<p>Phonebook has info for ${contacts.length} contacts</p><p>${new Date()}</p>`)
 })
 
-app.get('/api/contacts', (req, res) => {
+app.post(baseUrl, (req, res) => {
+  const { name, phoneNumber } = req.body
+
+  const newContact = {
+    id: String(generateId(contacts.length, 10000)),
+    name,
+    phoneNumber
+  }
+
+  contacts = contacts.concat(newContact)
+  res.json(newContact)
+})
+
+app.get(baseUrl, (req, res) => {
   res.json(contacts)
 })
 
-app.get('/api/contacts/:id', (req, res) => {
+app.get(`${baseUrl}/:id`, (req, res) => {
   const id = req.params.id
   const contact = contacts.find(c => c.id === id)
 
@@ -44,7 +64,7 @@ app.get('/api/contacts/:id', (req, res) => {
   res.json(contact)
 })
 
-app.delete('/api/contacts/:id', (req, res) => {
+app.delete(`${baseUrl}/:id`, (req, res) => {
   const id = req.params.id
   const contact = contacts.find(c => c.id === id)
 
