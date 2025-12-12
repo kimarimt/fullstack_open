@@ -1,7 +1,7 @@
 {
   "name": "phonebook",
   "version": "1.0.0",
-  "description": "Fullstack Open part 3 phonenook project",
+  "description": "Fullstack Open part 3 Phonebook project",
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
