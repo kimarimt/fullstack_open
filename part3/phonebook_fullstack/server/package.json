@@ -1,0 +1,17 @@
+{
+  "name": "phonebook",
+  "version": "1.0.0",
+  "description": "Fullstack Open part 3 Phonebook project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "author": "Alec German <kimarimt@protonmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "express": "^5.2.1",
+    "morgan": "^1.10.1"
+  }
+}

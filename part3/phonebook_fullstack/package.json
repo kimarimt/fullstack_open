@@ -1,0 +1,12 @@
+{
+  "name": "phonebook_fullstack",
+  "version": "1.0.0",
+  "description": "Phonebook Fullstack app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alec German <kimarimt@protonmail.com>",
+  "license": "MIT",
+  "type": "module"
+}
