@@ -1,4 +1,5 @@
 import express from 'express'
+import morgan from 'morgan'
 
 let contacts = [
   {
@@ -31,6 +32,7 @@ const generateId = (min, max) => {
 }
 
 app.use(express.json())
+app.use(morgan('tiny'))
 
 app.get('/info', (req, res) => {
   res.send(`<p>Phonebook has info for ${contacts.length} contacts</p><p>${new Date()}</p>`)
