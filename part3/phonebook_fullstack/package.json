@@ -4,9 +4,14 @@
   "description": "Phonebook Fullstack app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "cd ./server && rm -rf dist && cd ../client && npm run build && cp -r dist ../server",
+    "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\"",
+    "deploy": "npm run build && cd ./server && fly deploy"
   },
   "author": "Alec German <kimarimt@protonmail.com>",
   "license": "MIT",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }

@@ -1,5 +1,6 @@
 import express from 'express'
 import morgan from 'morgan'
+import cors from 'cors'
 
 let contacts = [
   {
@@ -32,6 +33,8 @@ const generateId = (min, max) => {
 }
 
 app.use(express.json())
+app.use(cors())
+app.use(express.static('dist'))
 
 morgan.token('body', (req, res) => { 
   return req.method === 'POST' ? JSON.stringify(req.body) : '' 
@@ -91,7 +94,7 @@ app.delete(`${baseUrl}/:id`, (req, res) => {
   res.status(204).end()
 })
 
-const port = 3001
+const port = process.env.PORT || 3001
 app.listen(port, () => {
   console.log(`⚡[server]: running on port ${port}`)
 })
