@@ -1,11 +1,13 @@
 const StatisticLine = ({ text, value }) => (
-  <>
-    <span>
-      {text} {value} 
+  <tr>
+    <td>
+      {text} 
+    </td>
+    <td>
+      {value} 
       {text === 'positive' ? '%' : ''}
-    </span>
-    <br />
-  </>
+    </td>
+  </tr>
 )
 
 export default StatisticLine
