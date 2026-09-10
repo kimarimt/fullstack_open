@@ -2,12 +2,17 @@ import { useState } from 'react'
 
 const App = () => {
   const [contacts, setContacts] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', phoneNumber: '305-204-3201' }
   ])
   const [name, setName] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
 
-  function handleChange(event) {
+  function handleNameChange(event) {
     setName(event.target.value)
+  }
+
+  function handlePhoneNumberChange(event) {
+    setPhoneNumber(event.target.value)
   }
 
   function handleSubmit(event) {
@@ -17,10 +22,11 @@ const App = () => {
     if (contactExists) {
       alert(`${contactExists.name} already exists in your contacts`)
     } else {
-      setContacts([...contacts, { name }])
+      const newContact = { name, phoneNumber }
+      setContacts([...contacts, newContact])
+      setName('')
+      setPhoneNumber('')
     }
-    
-    setName('')
   }
 
   return (
@@ -28,13 +34,23 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Name: </label>
+          <label htmlFor='name'>Name: </label>
           <input 
             id='name'
             name='name'
             type='text'
             value={name}
-            onChange={handleChange}
+            onChange={handleNameChange}
+          />
+        </div>
+        <div>
+          <label htmlFor='phoneNumber'>Number: </label>
+          <input 
+            id='phoneNumber' 
+            name='phoneNumber' 
+            type='text'
+            value={phoneNumber}
+            onChange={handlePhoneNumberChange}
           />
         </div>
         <div>
@@ -45,7 +61,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       {contacts.map((contact) => 
-        <p key={contact.name}>{contact.name}</p>
+        <p key={contact.name}>{contact.name} {contact.phoneNumber}</p>
       )}
     </>
   )
