@@ -12,7 +12,14 @@ const App = () => {
 
   function handleSubmit(event) {
     event.preventDefault()
-    setContacts([...contacts, { name }])
+    
+    const contactExists = contacts.find(contact => contact.name === name)
+    if (contactExists) {
+      alert(`${contactExists.name} already exists in your contacts`)
+    } else {
+      setContacts([...contacts, { name }])
+    }
+    
     setName('')
   }
 
