@@ -7,15 +7,15 @@ const App = () => {
   const [name, setName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
 
-  function handleNameChange(event) {
+  const handleNameChange = event => {
     setName(event.target.value)
   }
 
-  function handlePhoneNumberChange(event) {
+  const handlePhoneNumberChange = event => {
     setPhoneNumber(event.target.value)
   }
 
-  function handleSubmit(event) {
+  const handleSubmit = event => {
     event.preventDefault()
     
     const contactExists = contacts.find(contact => contact.name === name)
