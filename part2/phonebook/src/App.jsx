@@ -10,32 +10,42 @@ const App = () => {
 
   useEffect(() => {
     const fetchContacts = async () => {
-      const contactsData = await contactService.getAll()
+      const contactsData = await contactService.getAllContacts()
       setContacts(contactsData)
     }
 
     fetchContacts()
   }, [])
 
+  const editContact = async (contact, newPhoneNumber) => {
+    if (window.confirm(`${contact.name} already exists in your contacts. Would you like to update their number?`)) {
+      const newContact = {
+        ...contact,
+        phoneNumber: newPhoneNumber
+      }
+
+      const updatedContact = await contactService.updateContact(contact.id, newContact)
+      setContacts(contacts.map(c => c.id === updatedContact.id ? updatedContact : c))
+    }
+  }
+
   const handleTermChange = (newTerm) => {
     setSearchTerm(newTerm)
   }
 
   const handleFormSubmit = async (name, phoneNumber) => {
-    const contactExists = contacts.find(contact => contact.name === name) 
-    if (contactExists) {
-      alert(`${contactExists.name} already exists in your contacts`)
-      return false
+    const existingContact = contacts.find(contact => contact.name === name) 
+    if (existingContact) {
+      await editContact(existingContact, phoneNumber)
+    } else {
+      const newContact = {
+        name,
+        phoneNumber
+      }
+
+      const savedContact = await contactService.createContact(newContact)
+      setContacts([...contacts, savedContact])
     } 
-
-    const newContact = {
-      name,
-      phoneNumber
-    }
-
-    const savedContact = await contactService.create(newContact)
-    setContacts([...contacts, savedContact])
-    return true    
   }
 
   const handleDeleteContact = async (contact) => {

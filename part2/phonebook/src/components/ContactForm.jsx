@@ -6,12 +6,9 @@ const ContactForm = ({ onFormSubmit }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-
-    const success = onFormSubmit(name, phoneNumber)
-    if (success) {
-      setName('')
-      setPhoneNumber('')
-    }
+    onFormSubmit(name, phoneNumber)
+    setName('')
+    setPhoneNumber('')
   }
 
   const handleNameChange = (event) => {

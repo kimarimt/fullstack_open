@@ -12,6 +12,11 @@ const getAllContacts = async () => {
   return response.data
 }
 
+const updateContact = async (contactId, newContact) => {
+  const response = await axios.put(`${baseUrl}/${contactId}`, newContact)
+  return response.data
+}
+
 const deleteContact = async (contactId) => {
   await axios.delete(`${baseUrl}/${contactId}`)
 }
@@ -19,5 +24,6 @@ const deleteContact = async (contactId) => {
 export default {
   createContact,
   getAllContacts,
+  updateContact,
   deleteContact
 }
