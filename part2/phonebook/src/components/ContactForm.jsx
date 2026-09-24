@@ -34,6 +34,7 @@ const ContactForm = ({ onFormSubmit }) => {
             type='text'
             value={name}
             onChange={handleNameChange}
+            required
           />
         </div>
         <div>
@@ -44,6 +45,7 @@ const ContactForm = ({ onFormSubmit }) => {
             type='text'
             value={phoneNumber}
             onChange={handlePhoneNumberChange}
+            required
           />
         </div>
         <div>

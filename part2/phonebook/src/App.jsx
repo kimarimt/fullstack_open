@@ -21,7 +21,7 @@ const App = () => {
     setSearchTerm(newTerm)
   }
 
-  const handleFormSubmit = (name, phoneNumber) => {
+  const handleFormSubmit = async (name, phoneNumber) => {
     const contactExists = contacts.find(contact => contact.name === name) 
     if (contactExists) {
       alert(`${contactExists.name} already exists in your contacts`)
@@ -29,12 +29,12 @@ const App = () => {
     } 
 
     const newContact = {
-      id: contacts.length + 1,
       name,
       phoneNumber
     }
 
-    setContacts([...contacts, newContact])
+    const savedContact = await contactService.create(newContact)
+    setContacts([...contacts, savedContact])
     return true    
   }
 
