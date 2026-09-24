@@ -1,0 +1,24 @@
+{
+  "contacts": [
+    { 
+      "id": 1,
+      "name": "Arto Hellas", 
+      "phoneNumber": "305-204-3201"
+    },
+    { 
+      "id": 2,
+      "name": "Ada Lovelace", 
+      "phoneNumber": "305-200-7808"
+    },
+    { 
+      "id": 3,
+      "name": "Dan Abramov", 
+      "phoneNumber": "762-900-9760"
+    },
+    { 
+      "id": 4,
+      "name": "Mary Poppendieck", 
+      "phoneNumber": "305-863-3750"
+    }
+  ]
+}
