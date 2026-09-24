@@ -38,6 +38,13 @@ const App = () => {
     return true    
   }
 
+  const handleDeleteContact = async (contact) => {
+    if (window.confirm(`Are you want to delete ${contact.name} from your contacts?`)) {
+      await contactService.deleteContact(contact.id)
+      setContacts(contacts.filter(c => contact.id !== c.id))
+    }
+  }
+
   return (
     <>
       { contacts && (
@@ -48,6 +55,7 @@ const App = () => {
           <ContactsList 
             searchTerm={searchTerm}
             contacts={contacts}
+            onContactDelete={handleDeleteContact}
           />
         </>
       )}

@@ -19,11 +19,6 @@
       "name": "Mary Poppendieck",
       "phoneNumber": "305-863-3750",
       "id": "4"
-    },
-    {
-      "name": "John Doe",
-      "phoneNumber": "123-456-7890",
-      "id": "FOxS-hf3i8s"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

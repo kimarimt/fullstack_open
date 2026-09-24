@@ -1,4 +1,4 @@
-const ContactsList = ({ searchTerm, contacts }) => {
+const ContactsList = ({ searchTerm, contacts, onContactDelete }) => {
   const filteredContacts = searchTerm
     ? contacts.filter(contact => contact.name.toLowerCase().includes(searchTerm.toLowerCase()))
     : contacts
@@ -7,7 +7,12 @@ const ContactsList = ({ searchTerm, contacts }) => {
     <div>
       <h2>Contacts</h2>
       {filteredContacts.map((contact) => 
-        <p key={contact.id}>{contact.name} {contact.phoneNumber}</p>
+        <p key={contact.id}>
+          {contact.name} {contact.phoneNumber}
+          <button onClick={() => onContactDelete(contact)}>
+            delete
+          </button>
+        </p> 
       )}
     </div>
   )
