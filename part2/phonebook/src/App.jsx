@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react'
 import ContactForm from './components/ContactForm'
 import ContactsList from './components/ContactsList'
 import Filter from './components/Filter'
+import NotificationAlert from './components/NotificationAlert'
 import contactService from './services/contactService'
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [notificationColor, setNotificationColor] = useState('black')
   const [contacts, setContacts] = useState([])
 
   useEffect(() => {
@@ -37,6 +40,8 @@ const App = () => {
     const existingContact = contacts.find(contact => contact.name === name) 
     if (existingContact) {
       await editContact(existingContact, phoneNumber)
+      const message = `Updated phone number for ${existingContact.name}`
+      handleNotification(message)
     } else {
       const newContact = {
         name,
@@ -45,6 +50,8 @@ const App = () => {
 
       const savedContact = await contactService.createContact(newContact)
       setContacts([...contacts, savedContact])
+      const message = `Added ${savedContact.name} to your contacts`
+      handleNotification(message)
     } 
   }
 
@@ -55,11 +62,26 @@ const App = () => {
     }
   }
 
+  const handleNotification = (message, color = 'green') => {
+    setNotificationMessage(message)
+    setNotificationColor(color)
+    setTimeout(() => {
+      setNotificationMessage(null)
+      setNotificationColor('black')
+    }, 2000)
+  }
+
   return (
     <>
       { contacts && (
         <>
           <h1>Phonebook</h1>
+          {notificationMessage && 
+            <NotificationAlert 
+              message={notificationMessage} 
+              color={notificationColor} 
+            /> 
+          }
           <Filter onTermChange={handleTermChange} />
           <ContactForm onFormSubmit={handleFormSubmit} />
           <ContactsList 

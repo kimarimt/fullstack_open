@@ -1,0 +1,9 @@
+.alert {
+  background-color: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  padding: 3px;
+  padding-left: 10px;
+}
