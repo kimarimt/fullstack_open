@@ -4,6 +4,7 @@ import countryService from './services/country'
 
 const App = () => {
   const [countries, setCountries] = useState(null)
+  const [selectedCountry, setSelectedCountry] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   
   const matches = searchTerm
@@ -15,7 +16,6 @@ const App = () => {
       const countriesData = await countryService.getAll()
       setCountries(countriesData)
     }
-
     fetchCountries()
   }, [])
 
@@ -34,12 +34,29 @@ const App = () => {
             />
           </div>
           <div>
-            {matches.length === 0 && <p>No results found!</p>}
-            {matches.length === 1 && <CountryDetail country={matches[0]} />}
-            {matches.length > 1 && matches.length < 10 && (
-              matches.map(c => <p key={c.cca2}>{c.name.common}</p>)
+            {selectedCountry && (
+              <>
+                <CountryDetail country={selectedCountry} />
+                <button onClick={() => setSelectedCountry(null)}>Back</button>
+              </>
             )}
-            {matches.length > 10 && <p>Too many matches, specify another filter</p>}
+            {!selectedCountry && (
+              <>
+                {matches.length === 0 && <p>No results found!</p>}
+                {matches.length === 1 && <CountryDetail country={matches[0]} />}
+                {matches.length > 1 && matches.length < 10 && (
+                  matches.map(c => (
+                    <>
+                      <p key={c.cca2}>
+                        {c.name.common}{' '}
+                        <button onClick={() => setSelectedCountry(c)}>Show</button>
+                      </p>
+                    </>
+                  ))
+                )}
+                {matches.length > 10 && <p>Too many matches, specify another filter</p>}
+              </>
+            )}
           </div>
         </>
       )}
