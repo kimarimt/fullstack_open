@@ -19,11 +19,6 @@
       "name": "Mary Poppendieck",
       "phoneNumber": "305-863-3750",
       "id": "4"
-    },
-    {
-      "name": "James Sunderland",
-      "phoneNumber": "123-456-7890",
-      "id": "fwAZu8D_s_c"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

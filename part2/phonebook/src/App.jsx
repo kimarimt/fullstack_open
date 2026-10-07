@@ -57,8 +57,14 @@ const App = () => {
 
   const handleDeleteContact = async (contact) => {
     if (window.confirm(`Are you want to delete ${contact.name} from your contacts?`)) {
-      await contactService.deleteContact(contact.id)
-      setContacts(contacts.filter(c => contact.id !== c.id))
+      try {
+        await contactService.deleteContact(contact.id)
+        setContacts(contacts.filter(c => contact.id !== c.id))
+      } catch (error) {
+        console.log(error)
+        const alertMessage = `${contact.name}'s contact info has already been deleted`
+        handleNotification(alertMessage, 'red')
+      }
     }
   }
 
