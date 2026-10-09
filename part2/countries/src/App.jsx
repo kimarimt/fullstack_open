@@ -46,12 +46,10 @@ const App = () => {
                 {matches.length === 1 && <CountryDetail country={matches[0]} />}
                 {matches.length > 1 && matches.length < 10 && (
                   matches.map(c => (
-                    <>
-                      <p key={c.cca2}>
-                        {c.name.common}{' '}
-                        <button onClick={() => setSelectedCountry(c)}>Show</button>
-                      </p>
-                    </>
+                    <p key={c.cca2}>
+                      {c.name.common}{' '}
+                      <button onClick={() => setSelectedCountry(c)}>Show</button>
+                    </p>
                   ))
                 )}
                 {matches.length > 10 && <p>Too many matches, specify another filter</p>}
