@@ -21,8 +21,24 @@ let mockContacts = [
   },
 ]
 
+const addNewContact = (name, phoneNumber) => {
+  const contactId = Math.floor(Math.random() * (30000 - 1 + 1) + 1)
+  const newContact = {
+    id: String(contactId),
+    name,
+    phoneNumber
+  }
+
+  mockContacts = [...mockContacts, newContact]
+  return newContact
+}
+
 const findAllContacts = () => {
   return mockContacts;
+}
+
+const findContactByName = (name) => {
+  return mockContacts.find(contact => contact.name === name)
 }
 
 const findContactById = (contactId) => {
@@ -31,7 +47,6 @@ const findContactById = (contactId) => {
 
 const removeContact = (contactId) => {
   const existingContact = findContactById(contactId)
-
   if (!existingContact) {
     return false;
   }
@@ -41,7 +56,9 @@ const removeContact = (contactId) => {
 }
 
 export default {
+  addNewContact,
   findAllContacts,
+  findContactByName,
   findContactById,
   removeContact,
 }

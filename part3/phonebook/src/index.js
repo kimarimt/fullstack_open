@@ -6,6 +6,8 @@ import contactRoutes from './modules/contact/contact.routes.js'
 const port = 3000
 const app = express()
 
+app.use(express.json())
+
 app.get('/info', contactController.getInfo)
 app.use('/api/contacts', contactRoutes)
 

@@ -7,6 +7,21 @@ const getInfo = (req, res) => {
   return res.status(200).send(contactsInfo)
 }
 
+const createContact = (req, res) => {
+  const { name, phoneNumber } = req.body
+  if (!name || !phoneNumber) {
+    return res.status(400).json({ error: 'contact name and phoneNumber are required' })
+  }
+
+  const duplicateContact = contactService.findContactByName(name)
+  if (duplicateContact) {
+    return res.status(400).json({ error: `${name} is already in your contacts` })
+  }
+
+  const savedContact = contactService.addNewContact(name, phoneNumber)
+  return res.status(201).json(savedContact)
+}
+
 const getAllContacts = (req, res) => {
   const contacts = contactService.findAllContacts();
   return res.status(200).json(contacts)
@@ -36,6 +51,7 @@ const deleteContact = (req, res) => {
 
 export default {
   getInfo,
+  createContact,
   getAllContacts,
   getContactById,
   deleteContact,
