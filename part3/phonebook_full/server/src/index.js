@@ -1,6 +1,6 @@
 import express from 'express'
 import morgan from 'morgan'
-import cors from 'cors'
+import path from 'path'
 
 import contactController from './modules/contact/contact.controller.js'
 import contactRoutes from './modules/contact/contact.routes.js'
@@ -9,7 +9,7 @@ const port = process.env.PORT || 3001
 const app = express()
 
 app.use(express.json())
-app.use(cors())
+app.use(express.static(path.join(import.meta.dirname, '../dist')))
 
 // Logger midderware
 app.use(morgan('tiny', {
