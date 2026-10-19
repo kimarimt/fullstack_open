@@ -1,4 +1,4 @@
-import contactService from './contactService.js'
+import contactService from './contact.service.js'
 
 const getInfo = (req, res) => {
   const contacts = contactService.findAllContacts()
@@ -23,8 +23,20 @@ const getContactById = (req, res) => {
   return res.status(200).json(existingContact)
 }
 
+const deleteContact = (req, res) => {
+  const contactId = req.params.id
+  const success = contactService.removeContact(contactId)
+
+  if (!success) {
+    return res.status(404).json({ error: `contact with id ${contactId} not found` })
+  }
+
+  return res.status(204).send()
+}
+
 export default {
   getInfo,
   getAllContacts,
-  getContactById
+  getContactById,
+  deleteContact,
 }

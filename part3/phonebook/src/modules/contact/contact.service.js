@@ -1,4 +1,4 @@
-const mockContacts = [
+let mockContacts = [
   {
     id: '1',
     name: 'Arto Hellas',
@@ -29,7 +29,19 @@ const findContactById = (contactId) => {
   return mockContacts.find(contact => contact.id === contactId)
 }
 
+const removeContact = (contactId) => {
+  const existingContact = findContactById(contactId)
+
+  if (!existingContact) {
+    return false;
+  }
+
+  mockContacts = mockContacts.filter(contact => contact.id !== contactId)
+  return true;
+}
+
 export default {
   findAllContacts,
-  findContactById
+  findContactById,
+  removeContact,
 }

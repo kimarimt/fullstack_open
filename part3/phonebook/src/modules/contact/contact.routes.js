@@ -1,9 +1,10 @@
 import express from 'express'
-import contactController from './contactController.js';
+import contactController from './contact.controller.js';
 
 const router = express.Router();
 
 router.get('/', contactController.getAllContacts)
 router.get('/:id', contactController.getContactById)
+router.delete('/:id', contactController.deleteContact)
 
 export default router

@@ -1,7 +1,7 @@
 import express from 'express'
 
-import contactController from './modules/contact/contactController.js'
-import contactRoutes from './modules/contact/contactRoutes.js'
+import contactController from './modules/contact/contact.controller.js'
+import contactRoutes from './modules/contact/contact.routes.js'
 
 const port = 3000
 const app = express()
