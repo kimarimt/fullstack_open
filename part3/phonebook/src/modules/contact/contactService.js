@@ -25,6 +25,11 @@ const findAllContacts = () => {
   return mockContacts;
 }
 
+const findContactById = (contactId) => {
+  return mockContacts.find(contact => contact.id === contactId)
+}
+
 export default {
-  findAllContacts
+  findAllContacts,
+  findContactById
 }

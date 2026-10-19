@@ -12,7 +12,19 @@ const getAllContacts = (req, res) => {
   return res.status(200).json(contacts)
 }
 
+const getContactById = (req, res) => {
+  const contactId = req.params.id 
+  const existingContact = contactService.findContactById(contactId)
+  
+  if (!existingContact) {
+    return res.status(404).json({ error: `contact with id ${contactId} not found` })
+  }
+
+  return res.status(200).json(existingContact)
+}
+
 export default {
   getInfo,
-  getAllContacts
+  getAllContacts,
+  getContactById
 }
