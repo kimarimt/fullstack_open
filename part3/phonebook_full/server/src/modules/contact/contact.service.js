@@ -1,6 +1,13 @@
 import Contact from './contact.schema.js'
+import APIError from '../../shared/exceptions/APIError.js'
 
 const addNewContact = async (name, phoneNumber) => {
+  const duplicateContact = await findContactByName(name)
+  if (duplicateContact) {
+    const message = `${name} is already in your contacts`
+    throw new APIError(message, 400)
+  }
+
   const newContact = new Contact({
     name,
     phoneNumber
@@ -22,12 +29,20 @@ const findContactByName = async (name) => {
 
 const findContactById = async (contactId) => {
   const existingContact = await Contact.findById(contactId)
+  if (!existingContact) {
+    const message = `contact with id ${contactId} not found`
+    throw new APIError(message, 404)
+  }
+
   return existingContact
 }
 
 const removeContact = async (contactId) => {
   const deletedUser = await Contact.findByIdAndDelete(contactId)
-  return deletedUser !== null
+  if (!deletedUser) {
+    const message = `contact with id ${contactId} not found`
+    throw new APIError(message, 404)
+  }
 }
 
 export default {

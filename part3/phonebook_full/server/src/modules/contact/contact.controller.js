@@ -7,19 +7,14 @@ const getInfo = async (req, res) => {
   return res.status(200).send(contactsInfo)
 }
 
-const createContact = async (req, res) => {
-  const { name, phoneNumber } = req.body
-  if (!name || !phoneNumber) {
-    return res.status(400).json({ error: 'contact name and phoneNumber are required' })
+const createContact = async (req, res, next) => {
+  try {
+    const { name, phoneNumber } = req.body
+    const savedContact = await contactService.addNewContact(name, phoneNumber)
+    return res.status(201).json(savedContact)
+  } catch (err) {
+    next(err)
   }
-
-  const duplicateContact = await contactService.findContactByName(name)
-  if (duplicateContact) {
-    return res.status(400).json({ error: `${name} is already in your contacts` })
-  }
-
-  const savedContact = await contactService.addNewContact(name, phoneNumber)
-  return res.status(201).json(savedContact)
 }
 
 const getAllContacts = async (req, res) => {
@@ -27,26 +22,24 @@ const getAllContacts = async (req, res) => {
   return res.status(200).json(contacts)
 }
 
-const getContactById = async (req, res) => {
-  const contactId = req.params.id 
-  const existingContact = await contactService.findContactById(contactId)
-  
-  if (!existingContact) {
-    return res.status(404).json({ error: `contact with id ${contactId} not found` })
+const getContactById = async (req, res, next) => {
+  try {
+    const contactId = req.params.id 
+    const existingContact = await contactService.findContactById(contactId)
+    return res.status(200).json(existingContact)
+  } catch (err) {
+    next(err)
   }
-
-  return res.status(200).json(existingContact)
 }
 
-const deleteContact = async (req, res) => {
-  const contactId = req.params.id
-  const success = await contactService.removeContact(contactId)
-
-  if (!success) {
-    return res.status(404).json({ error: `contact with id ${contactId} not found` })
+const deleteContact = async (req, res, next) => {
+  try {
+    const contactId = req.params.id
+    await contactService.removeContact(contactId)
+    return res.status(204).send()
+  } catch (err) {
+    next(err)
   }
-
-  return res.status(204).send()
 }
 
 export default {

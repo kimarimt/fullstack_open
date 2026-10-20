@@ -3,6 +3,7 @@ import morgan from 'morgan'
 import mongoose from 'mongoose'
 import path from 'path'
 
+import middleware from './shared/middleware/middleware.js'
 import contactController from './modules/contact/contact.controller.js'
 import contactRoutes from './modules/contact/contact.routes.js'
 
@@ -35,6 +36,7 @@ const startServer = async () => {
 
     app.get('/info', contactController.getInfo)
     app.use('/api/contacts', contactRoutes)
+    app.use(middleware.errorMiddleware)
 
     app.listen(port, () => {
       console.log(`[server]: Running on port ${port}`)

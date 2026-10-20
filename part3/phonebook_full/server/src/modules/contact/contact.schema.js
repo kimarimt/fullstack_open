@@ -1,8 +1,14 @@
 import mongoose from 'mongoose'
 
 const contactSchema = new mongoose.Schema({
-  name: String,
-  phoneNumber: String,
+  name: {
+    type: String,
+    required: [true, 'contact name is required']
+  },
+  phoneNumber: {
+    type: String,
+    required: [true, 'contact phone number is required']
+  },
 })
 
 contactSchema.set('toJSON', {
