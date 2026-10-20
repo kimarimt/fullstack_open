@@ -38,9 +38,9 @@ const getContactById = async (req, res) => {
   return res.status(200).json(existingContact)
 }
 
-const deleteContact = (req, res) => {
+const deleteContact = async (req, res) => {
   const contactId = req.params.id
-  const success = contactService.removeContact(contactId)
+  const success = await contactService.removeContact(contactId)
 
   if (!success) {
     return res.status(404).json({ error: `contact with id ${contactId} not found` })
