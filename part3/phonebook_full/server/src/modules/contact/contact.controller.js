@@ -1,35 +1,35 @@
 import contactService from './contact.service.js'
 
-const getInfo = (req, res) => {
-  const contacts = contactService.findAllContacts()
+const getInfo = async (req, res) => {
+  const contacts = await contactService.findAllContacts()
   const currentDate = new Date().toString()
   const contactsInfo = `<p>Phonebook currently has ${contacts.length} contacts</p><p>${currentDate}</p>`
   return res.status(200).send(contactsInfo)
 }
 
-const createContact = (req, res) => {
+const createContact = async (req, res) => {
   const { name, phoneNumber } = req.body
   if (!name || !phoneNumber) {
     return res.status(400).json({ error: 'contact name and phoneNumber are required' })
   }
 
-  const duplicateContact = contactService.findContactByName(name)
+  const duplicateContact = await contactService.findContactByName(name)
   if (duplicateContact) {
     return res.status(400).json({ error: `${name} is already in your contacts` })
   }
 
-  const savedContact = contactService.addNewContact(name, phoneNumber)
+  const savedContact = await contactService.addNewContact(name, phoneNumber)
   return res.status(201).json(savedContact)
 }
 
-const getAllContacts = (req, res) => {
-  const contacts = contactService.findAllContacts();
+const getAllContacts = async (req, res) => {
+  const contacts = await contactService.findAllContacts();
   return res.status(200).json(contacts)
 }
 
-const getContactById = (req, res) => {
+const getContactById = async (req, res) => {
   const contactId = req.params.id 
-  const existingContact = contactService.findContactById(contactId)
+  const existingContact = await contactService.findContactById(contactId)
   
   if (!existingContact) {
     return res.status(404).json({ error: `contact with id ${contactId} not found` })

@@ -1,3 +1,5 @@
+import Contact from './contact.schema.js'
+
 let mockContacts = [
   {
     id: '1',
@@ -21,28 +23,29 @@ let mockContacts = [
   },
 ]
 
-const addNewContact = (name, phoneNumber) => {
-  const contactId = Math.floor(Math.random() * (30000 - 1 + 1) + 1)
-  const newContact = {
-    id: String(contactId),
+const addNewContact = async (name, phoneNumber) => {
+  const newContact = new Contact({
     name,
     phoneNumber
-  }
+  })
 
-  mockContacts = [...mockContacts, newContact]
-  return newContact
+  const savedContact = await newContact.save()
+  return savedContact
 }
 
-const findAllContacts = () => {
-  return mockContacts;
+const findAllContacts = async () => {
+  const contacts = await Contact.find({})
+  return contacts
 }
 
-const findContactByName = (name) => {
-  return mockContacts.find(contact => contact.name === name)
+const findContactByName = async (name) => {
+  const existingContact = await Contact.findOne({ name: name })
+  return existingContact
 }
 
-const findContactById = (contactId) => {
-  return mockContacts.find(contact => contact.id === contactId)
+const findContactById = async (contactId) => {
+  const existingContact = await Contact.findById(contactId)
+  return existingContact
 }
 
 const removeContact = (contactId) => {
